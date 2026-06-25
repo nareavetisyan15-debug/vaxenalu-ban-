@@ -1,0 +1,677 @@
+<title>Pizza Kitchen</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent: #E8735A; --accent-dk: #C85A42;
+    --text: #3D2B1F; --text-soft: #8A6E5C; --cream: #FFF8EE;
+    --hud: #5C1818;
+  }
+  body {
+    font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+    background: #EDD0C8; color: var(--text);
+    height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  /* ── HUD ── */
+  .hud {
+    background: var(--hud); padding: 8px 16px;
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    border-bottom: 3px solid #3A0808; z-index: 50;
+  }
+  .hud-pill {
+    background: rgba(0,0,0,0.35); border-radius: 20px; padding: 5px 12px;
+    display: flex; align-items: center; gap: 6px;
+    color: #fff; font-weight: 700; font-size: 0.85rem; white-space: nowrap;
+  }
+  .hud-day-wrap { display: flex; flex-direction: column; line-height: 1.1; }
+  .hud-daynum { font-size: 0.6rem; opacity: 0.7; font-weight: 600; letter-spacing: 1px; }
+  .hud-time { font-size: 0.95rem; font-weight: 800; }
+  .hud-spacer { flex: 1; }
+
+  /* ── SCENES ── */
+  .scene { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+  .scene.hidden { display: none; }
+
+  /* ── COUNTER SCENE ── */
+  .cs-wrap { flex: 1; position: relative; overflow: hidden; }
+  .cs-wall {
+    position: absolute; inset: 0 0 32% 0;
+    background:
+      repeating-linear-gradient(transparent 0, transparent 22px, rgba(0,0,0,0.06) 22px, rgba(0,0,0,0.06) 24px),
+      repeating-linear-gradient(90deg, transparent 0, transparent 48px, rgba(0,0,0,0.045) 48px, rgba(0,0,0,0.045) 50px),
+      #C07068;
+  }
+  .cs-floor {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 32%;
+    background: repeating-conic-gradient(#EAC4BC 0% 25%, #DCAAA0 0% 50%) 0 0 / 42px 42px;
+  }
+  .cs-table { position: absolute; background: #5A2828; border-radius: 50%; }
+  .cs-table.t1 { width: 90px; height: 44px; bottom: 31%; left: 38%; }
+  .cs-table.t2 { width: 76px; height: 38px; bottom: 31%; left: 59%; }
+  .cs-chair { position: absolute; width: 24px; height: 36px; background: #3A1818; border-radius: 4px 4px 0 0; bottom: calc(31% - 10px); }
+  .cs-chair.c1 { left: 38%; } .cs-chair.c2 { left: 45%; }
+  .cs-chair.c3 { left: 58%; } .cs-chair.c4 { left: 65%; }
+  .cs-frame { position: absolute; top: 10px; background: #8A4838; border: 3px solid #6A3020; border-radius: 3px; }
+  .cs-frame.f1 { right: 90px; width: 70px; height: 52px; }
+  .cs-frame.f2 { right: 20px; width: 54px; height: 42px; top: 8px; }
+  .cs-frame.f1::after { content:''; position:absolute; inset:6px; background:#A05840; border-radius:1px; }
+  .cs-counter {
+    position: absolute; bottom: 28%; left: 0; right: 0; height: 82px;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.03) 4px, rgba(0,0,0,0.03) 8px),
+      linear-gradient(180deg, #D8A858 0%, #A87830 100%);
+    border-top: 5px solid #F0CC70; border-bottom: 7px solid #784818;
+    display: flex; align-items: flex-start; padding: 0 24px; gap: 18px;
+  }
+  .cs-register {
+    width: 76px; height: 68px; background: #2E2818; border-radius: 6px 6px 0 0;
+    margin-top: -14px; position: relative; flex-shrink: 0;
+  }
+  .cs-register::before { content:''; position:absolute; top:8px; left:8px; right:8px; height:24px; background:#4A3828; border-radius:3px; }
+  .cs-register::after { content:''; position:absolute; bottom:0; left:8px; right:8px; height:10px; background:#1A1408; border-radius:2px 2px 0 0; }
+  .cs-counter-pizza {
+    width: 66px; height: 46px;
+    background: repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 6px), linear-gradient(#C49040, #A87028);
+    border-radius: 5px 5px 0 0; margin-top: -8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+  }
+  .cs-jar {
+    width: 28px; height: 40px; margin-top: 4px;
+    background: linear-gradient(180deg, rgba(180,220,200,0.8), rgba(140,180,160,0.6));
+    border: 2px solid rgba(100,140,120,0.6); border-radius: 4px 4px 6px 6px; position: relative;
+  }
+  .cs-jar::before { content:''; position:absolute; top:-6px; left:4px; right:4px; height:8px; background:#8AAA90; border-radius:3px 3px 0 0; }
+  .cs-cat { position: absolute; right: 18px; bottom: calc(28% + 80px); font-size: 2.4rem; line-height:1; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2)); }
+  .cs-worker { position: absolute; left: 28px; bottom: calc(28% + 78px); width: 110px; filter: drop-shadow(3px 6px 10px rgba(0,0,0,0.25)); }
+  .cs-customer { position: absolute; right: 72px; bottom: calc(28% + 75px); width: 88px; filter: drop-shadow(3px 6px 10px rgba(0,0,0,0.25)); transition: opacity 0.2s; }
+  .cs-customer.kid { width: 70px; }
+  .cs-name-tag {
+    position: absolute; bottom: calc(28% + 68px); right: 72px;
+    background: rgba(255,248,238,0.9); border: 1.5px solid #E2CDB4;
+    border-radius: 12px; padding: 3px 10px;
+    font-size: 0.65rem; font-weight: 800; color: var(--text-soft);
+    letter-spacing: 0.5px; white-space: nowrap;
+    backdrop-filter: blur(4px); text-align: center; min-width: 88px;
+  }
+  .cs-dialogue {
+    position: absolute; top: 18px; left: 148px; right: 178px;
+    display: flex; flex-direction: column; gap: 12px; z-index: 20;
+  }
+  .speech-bubble {
+    background: #FFF8EE; border: 3px solid #E0C8A0; border-radius: 22px;
+    padding: 16px 20px; position: relative;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    animation: bubbleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .speech-bubble::after {
+    content: ''; position: absolute; bottom: -20px; right: 24px;
+    border-top: 20px solid #FFF8EE; border-left: 16px solid transparent;
+    filter: drop-shadow(0 3px 0 #E0C8A0);
+  }
+  @keyframes bubbleIn {
+    from { transform: scale(0.88) translateY(-8px); opacity: 0; }
+    to   { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .speech-bubble p { font-size: 0.98rem; line-height: 1.6; color: var(--text); font-weight: 500; }
+  .hint-bubble { background: #EAF5EA; border: 2px dashed #90C890; border-radius: 14px; padding: 10px 14px; animation: bubbleIn 0.2s ease; }
+  .hint-bubble.hidden { display: none; }
+  .hint-bubble p { font-size: 0.8rem; color: #2A6A2A; font-weight: 600; }
+  .hint-label { font-size: 0.62rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #508050; margin-bottom: 3px; }
+  .response-btns { display: flex; gap: 10px; margin-top: 4px; }
+  .btn-okay, .btn-what {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 30px; font-family: inherit;
+    font-size: 0.92rem; font-weight: 700; cursor: pointer;
+    transition: all 0.15s; box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  }
+  .btn-okay { background:#FFF8EE; border:2.5px solid #E0C8A0; color:var(--text); flex:1.2; }
+  .btn-okay:hover { background:#FFF0D8; border-color:var(--accent); transform:translateY(-2px); }
+  .btn-what { background:#FFF8EE; border:2.5px solid #E0C8A0; color:var(--text-soft); flex:1; }
+  .btn-what:hover { background:#F5F0E8; transform:translateY(-2px); }
+  .btn-key { display:inline-flex; align-items:center; justify-content:center; width:21px; height:21px; background:#B09070; color:#FFF8EE; border-radius:50%; font-size:0.68rem; font-weight:900; flex-shrink:0; }
+
+  /* ── KITCHEN SCENE ── */
+  #kitchen-scene { background: #EDD0C8; }
+
+  .k-order-bar {
+    background: rgba(255,245,238,0.88);
+    border-bottom: 2px solid rgba(196,140,120,0.4);
+    padding: 8px 18px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex-shrink: 0;
+  }
+  .k-order-eyebrow { font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; color: #B08070; text-transform: uppercase; white-space: nowrap; }
+  .k-pizza-name { font-size: 0.88rem; font-weight: 900; color: var(--accent); white-space: nowrap; }
+  .k-order-divider { width: 1px; height: 22px; background: rgba(196,140,120,0.4); flex-shrink: 0; }
+  .k-ticket-items { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .ticket-item {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(255,248,244,0.9); border: 1.5px solid #DDB8AC;
+    border-radius: 20px; padding: 2px 8px 2px 5px;
+    font-size: 0.7rem; font-weight: 600; color: var(--text); transition: all 0.18s;
+  }
+  .ticket-item.done { background: #E4F2E4; border-color: #82B882; color: #2A6A2A; }
+  .ti-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+  .k-body { flex: 1; display: flex; min-height: 0; overflow: hidden; }
+
+  /* Left: pizza station */
+  .k-pizza-station {
+    flex: 0 0 42%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 16px 12px 16px 20px; gap: 14px;
+  }
+  .k-board-wrap {
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.03) 4px, rgba(0,0,0,0.03) 8px),
+      linear-gradient(160deg, #D4A460 0%, #A87030 100%);
+    border-radius: 20px; padding: 18px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #pizza-canvas {
+    border-radius: 50%; display: block;
+    filter: drop-shadow(0 5px 14px rgba(0,0,0,0.28));
+    max-width: 100%;
+  }
+  .k-actions { display: flex; gap: 9px; width: 100%; }
+  .k-btn-clear {
+    flex: 1; padding: 11px; border: 2px solid #C8A090;
+    background: rgba(255,245,238,0.85); color: #8A6E5C;
+    font-size: 0.82rem; font-weight: 700; border-radius: 12px;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .k-btn-clear:hover { border-color: var(--accent); color: var(--accent); }
+  .k-btn-serve {
+    flex: 2; padding: 11px 16px; background: var(--accent); color: #fff;
+    font-size: 0.9rem; font-weight: 800; border: none; border-radius: 12px;
+    cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 14px rgba(232,115,90,0.42); transition: all 0.15s;
+  }
+  .k-btn-serve:hover { background: var(--accent-dk); transform: translateY(-1px); }
+  .k-btn-serve:active { transform: translateY(0); }
+
+  /* Right: ingredient shelf */
+  .k-ingredient-station {
+    flex: 1;
+    background: rgba(255,240,232,0.42);
+    border-left: 2px solid rgba(196,140,120,0.28);
+    padding: 12px 14px 12px 10px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .k-ingredient-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+    overflow-y: auto;
+    flex: 1;
+    align-content: start;
+  }
+
+  /* Ingredient cards — texture-forward, reference style */
+  .ing-card {
+    background: #FFF8F4; border: 2px solid #DDB8AC; border-radius: 10px;
+    overflow: hidden; cursor: pointer;
+    display: flex; flex-direction: column;
+    transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s;
+    user-select: none;
+  }
+  .ing-card:hover { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(0,0,0,0.13); }
+  .ing-card:active { transform: translateY(0); }
+  .ing-card.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(232,115,90,0.28), 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .ing-texture { flex: 1; min-height: 54px; position: relative; }
+  .ing-check {
+    position: absolute; top: 4px; right: 4px; width: 17px; height: 17px;
+    background: var(--accent); border-radius: 50%;
+    display: none; align-items: center; justify-content: center;
+    color: #fff; font-size: 8px; font-weight: 900;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  }
+  .ing-card.selected .ing-check { display: flex; }
+  .ing-label {
+    padding: 4px 3px 5px; font-size: 0.58rem; font-weight: 700;
+    text-align: center; color: #5A3C30; line-height: 1.2;
+    background: rgba(255,248,244,0.96); border-top: 1px solid #DDB8AC;
+  }
+
+  /* Ingredient textures */
+  .tex-sauce     { background:radial-gradient(circle at 22% 38%,rgba(255,255,255,0.12) 18px,transparent 18px),radial-gradient(circle at 72% 65%,rgba(255,255,255,0.08) 12px,transparent 12px),linear-gradient(145deg,#D44030,#B02818); }
+  .tex-cheese    { background:radial-gradient(ellipse 28px 18px at 25% 45%,rgba(255,255,255,0.55),transparent),radial-gradient(ellipse 22px 14px at 70% 60%,rgba(255,255,255,0.45),transparent),linear-gradient(145deg,#F0D060,#D8B840); }
+  .tex-pepperoni { background:radial-gradient(circle 14px at 28% 42%,#8A1A28 40%,transparent 40%),radial-gradient(circle 14px at 70% 35%,#8A1A28 40%,transparent 40%),linear-gradient(145deg,#AE2035,#8A1520); }
+  .tex-mushroom  { background:radial-gradient(ellipse 20px 10px at 30% 55%,rgba(0,0,0,0.15),transparent),radial-gradient(ellipse 16px 8px at 68% 50%,rgba(0,0,0,0.12),transparent),linear-gradient(145deg,#B09070,#8A6E52); }
+  .tex-olive     { background:radial-gradient(circle 12px at 28% 45%,rgba(100,80,20,0.4) 40%,transparent 40%),radial-gradient(circle 12px at 68% 38%,rgba(100,80,20,0.4) 40%,transparent 40%),linear-gradient(145deg,#3A3020,#201A10); }
+  .tex-pepper    { background:repeating-linear-gradient(-45deg,rgba(255,255,255,0.12) 0px,rgba(255,255,255,0.12) 4px,transparent 4px,transparent 12px),linear-gradient(145deg,#3ABF5A,#1E8E38); }
+  .tex-onion     { background:repeating-linear-gradient(20deg,rgba(255,255,255,0.12) 0px,rgba(255,255,255,0.12) 3px,transparent 3px,transparent 10px),linear-gradient(145deg,#9B52C0,#6B2890); }
+  .tex-basil     { background:radial-gradient(ellipse 24px 14px at 30% 50%,rgba(255,255,255,0.2),transparent),radial-gradient(ellipse 20px 12px at 68% 45%,rgba(255,255,255,0.15),transparent),linear-gradient(145deg,#30B050,#18782E); }
+  .tex-sausage   { background:radial-gradient(circle 13px at 28% 42%,#5A2010 40%,transparent 40%),radial-gradient(circle 13px at 70% 60%,#5A2010 40%,transparent 40%),linear-gradient(145deg,#8B4428,#6B3018); }
+  .tex-bacon     { background:repeating-linear-gradient(0deg,#D84848 0,#D84848 5px,#F4A090 5px,#F4A090 10px,#C83030 10px,#C83030 14px,#F4A090 14px,#F4A090 19px); }
+  .tex-ham       { background:radial-gradient(ellipse 20px 14px at 30% 45%,rgba(255,255,255,0.35),transparent),radial-gradient(ellipse 16px 12px at 68% 60%,rgba(255,255,255,0.3),transparent),linear-gradient(145deg,#F08880,#D86060); }
+  .tex-anchovy   { background:radial-gradient(ellipse 22px 6px at 30% 50%,#1A0C08,transparent),radial-gradient(ellipse 18px 5px at 70% 50%,#1A0C08,transparent),linear-gradient(145deg,#3A1810,#1A0808); }
+  .tex-shrimp    { background:radial-gradient(ellipse 18px 10px at 25% 50%,rgba(255,255,255,0.3),transparent),radial-gradient(ellipse 15px 8px at 72% 50%,rgba(255,255,255,0.25),transparent),linear-gradient(145deg,#F08080,#C85060); }
+  .tex-chicken   { background:radial-gradient(ellipse 22px 14px at 30% 45%,rgba(255,255,255,0.4),transparent),radial-gradient(ellipse 18px 12px at 68% 60%,rgba(255,255,255,0.35),transparent),linear-gradient(145deg,#E8C880,#C8A048); }
+  .tex-pineapple { background:repeating-linear-gradient(45deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 3px,transparent 3px,transparent 8px),repeating-linear-gradient(-45deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 3px,transparent 3px,transparent 8px),linear-gradient(145deg,#F0C020,#D8A810); }
+  .tex-corn      { background:radial-gradient(circle 4px at 20% 30%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 40% 30%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 60% 30%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 20% 65%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 40% 65%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 60% 65%,#D4A010 4px,transparent 4px),linear-gradient(145deg,#F0C820,#D8B010); }
+  .tex-eggplant  { background:radial-gradient(ellipse 18px 28px at 50% 50%,rgba(255,255,255,0.12),transparent),linear-gradient(145deg,#6A1888,#3A0850); }
+
+  /* ── FEEDBACK ── */
+  .feedback-overlay { position:fixed; inset:0; background:rgba(61,43,31,0.65); display:flex; align-items:center; justify-content:center; z-index:200; backdrop-filter:blur(4px); }
+  .feedback-overlay.hidden { display:none; }
+  .feedback-card { background:var(--cream); border-radius:24px; padding:30px 36px; text-align:center; box-shadow:0 24px 60px rgba(0,0,0,0.3); max-width:300px; width:90%; animation:popIn 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+  .fb-emoji { font-size:2.6rem; margin-bottom:6px; }
+  .fb-stars  { font-size:1.6rem; margin-bottom:6px; }
+  .fb-title  { font-size:1.45rem; font-weight:900; margin-bottom:4px; }
+  .fb-sub    { font-size:0.83rem; color:var(--text-soft); margin-bottom:12px; }
+  .fb-pts    { font-size:1.8rem; font-weight:900; color:var(--accent); margin-bottom:16px; }
+  .fb-detail { font-size:0.75rem; color:var(--text-soft); margin-bottom:18px; line-height:1.6; }
+  .btn-next { width:100%; padding:13px; background:var(--accent); color:#fff; font-size:0.92rem; font-weight:800; border:none; border-radius:14px; cursor:pointer; font-family:inherit; box-shadow:0 4px 14px rgba(232,115,90,0.4); transition:all 0.15s; }
+  .btn-next:hover { background:var(--accent-dk); transform:translateY(-1px); }
+</style>
+
+<!-- HUD -->
+<div class="hud">
+  <div class="hud-pill">
+    <span>☀️</span>
+    <div class="hud-day-wrap">
+      <div class="hud-daynum">CUSTOMER</div>
+      <div class="hud-time"><span id="hud-day">1</span> / 10</div>
+    </div>
+  </div>
+  <div class="hud-pill">😊 <span id="hud-mood">100%</span></div>
+  <div class="hud-spacer"></div>
+  <div class="hud-pill">🪙 <span id="hud-coins">0</span></div>
+  <div class="hud-pill">💵 $<span id="hud-money">0.00</span></div>
+</div>
+
+<!-- COUNTER SCENE -->
+<div class="scene" id="counter-scene">
+  <div class="cs-wrap">
+    <div class="cs-wall">
+      <div class="cs-frame f1"></div>
+      <div class="cs-frame f2"></div>
+    </div>
+    <div class="cs-floor"></div>
+    <div class="cs-table t1"></div>
+    <div class="cs-table t2"></div>
+    <div class="cs-chair c1"></div><div class="cs-chair c2"></div>
+    <div class="cs-chair c3"></div><div class="cs-chair c4"></div>
+    <div class="cs-counter">
+      <div class="cs-register"></div>
+      <div class="cs-counter-pizza">🍕</div>
+      <div class="cs-jar"></div>
+    </div>
+    <div class="cs-worker">
+      <svg viewBox="0 0 100 170" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="78" cy="82" rx="8" ry="24" fill="#C06828"/>
+        <rect x="22" y="92" width="56" height="65" rx="10" fill="#7AAF50"/>
+        <rect x="33" y="98" width="34" height="54" rx="5" fill="#F5ECE0"/>
+        <rect x="26" y="98" width="9" height="6" rx="3" fill="#F5ECE0"/>
+        <rect x="65" y="98" width="9" height="6" rx="3" fill="#F5ECE0"/>
+        <rect x="42" y="86" width="16" height="12" rx="3" fill="#F4C896"/>
+        <ellipse cx="50" cy="66" rx="28" ry="30" fill="#F4C896"/>
+        <ellipse cx="50" cy="44" rx="29" ry="20" fill="#C06828"/>
+        <ellipse cx="26" cy="68" rx="10" ry="18" fill="#C06828"/>
+        <ellipse cx="74" cy="68" rx="10" ry="18" fill="#C06828"/>
+        <ellipse cx="41" cy="66" rx="4" ry="4.5" fill="#3D2B1F"/>
+        <ellipse cx="59" cy="66" rx="4" ry="4.5" fill="#3D2B1F"/>
+        <circle cx="42.5" cy="64.5" r="1.3" fill="white"/>
+        <circle cx="60.5" cy="64.5" r="1.3" fill="white"/>
+        <path d="M 37 59 Q 41 56 45 58" stroke="#8A3820" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M 55 58 Q 59 56 63 59" stroke="#8A3820" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="50" cy="72" rx="2.5" ry="1.5" fill="#E0A870"/>
+        <ellipse cx="35" cy="73" rx="7" ry="4.5" fill="#F0A088" opacity="0.5"/>
+        <ellipse cx="65" cy="73" rx="7" ry="4.5" fill="#F0A088" opacity="0.5"/>
+        <path d="M 43 80 Q 50 88 57 80" stroke="#C06828" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <rect x="2" y="95" width="23" height="13" rx="6" fill="#7AAF50"/>
+        <ellipse cx="5" cy="101" rx="5" ry="6.5" fill="#F4C896"/>
+        <rect x="75" y="95" width="23" height="13" rx="6" fill="#7AAF50"/>
+        <ellipse cx="95" cy="101" rx="5" ry="6.5" fill="#F4C896"/>
+      </svg>
+    </div>
+    <div class="cs-customer" id="cs-customer"></div>
+    <div class="cs-name-tag" id="cs-name-tag">Customer</div>
+    <div class="cs-cat">🐱</div>
+    <div class="cs-dialogue">
+      <div class="speech-bubble" id="speech-bubble">
+        <p id="customer-text"></p>
+      </div>
+      <div class="hint-bubble hidden" id="hint-bubble">
+        <div class="hint-label">Order summary</div>
+        <p id="hint-text"></p>
+      </div>
+      <div class="response-btns">
+        <button class="btn-okay" onclick="goToKitchen()"><span class="btn-key">A</span> Okay</button>
+        <button class="btn-what" onclick="showHint()"><span class="btn-key">B</span> What?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KITCHEN SCENE -->
+<div class="scene hidden" id="kitchen-scene">
+  <div class="k-order-bar">
+    <span class="k-order-eyebrow">ORDER</span>
+    <span class="k-pizza-name" id="ticket-pizza-name"></span>
+    <div class="k-order-divider"></div>
+    <div class="k-ticket-items" id="ticket-items"></div>
+  </div>
+  <div class="k-body">
+    <div class="k-pizza-station">
+      <div class="k-board-wrap">
+        <canvas id="pizza-canvas" width="220" height="220"></canvas>
+      </div>
+      <div class="k-actions">
+        <button class="k-btn-clear" onclick="clearPizza()">Clear</button>
+        <button class="k-btn-serve" onclick="servePizza()">Serve! →</button>
+      </div>
+    </div>
+    <div class="k-ingredient-station">
+      <div class="k-ingredient-grid" id="ingredients-panel"></div>
+    </div>
+  </div>
+</div>
+
+<div class="feedback-overlay hidden" id="feedback-overlay">
+  <div class="feedback-card" id="feedback-card"></div>
+</div>
+
+<script>
+const INGREDIENTS = [
+  { id:'sauce',     name:'Tomato Sauce', tex:'tex-sauce',     dot:'#C0392B' },
+  { id:'cheese',    name:'Mozzarella',   tex:'tex-cheese',    dot:'#F0D060' },
+  { id:'pepperoni', name:'Pepperoni',    tex:'tex-pepperoni', dot:'#9B2335' },
+  { id:'sausage',   name:'Sausage',      tex:'tex-sausage',   dot:'#7A3018' },
+  { id:'mushroom',  name:'Mushrooms',    tex:'tex-mushroom',  dot:'#9E7A55' },
+  { id:'olive',     name:'Black Olives', tex:'tex-olive',     dot:'#302818' },
+  { id:'pepper',    name:'Bell Pepper',  tex:'tex-pepper',    dot:'#27AE60' },
+  { id:'onion',     name:'Red Onion',    tex:'tex-onion',     dot:'#8B44B0' },
+  { id:'basil',     name:'Fresh Basil',  tex:'tex-basil',     dot:'#1E8449' },
+  { id:'pineapple', name:'Pineapple',    tex:'tex-pineapple', dot:'#F0C020' },
+  { id:'corn',      name:'Corn',         tex:'tex-corn',      dot:'#E0B810' },
+  { id:'bacon',     name:'Bacon',        tex:'tex-bacon',     dot:'#D84848' },
+  { id:'ham',       name:'Ham',          tex:'tex-ham',       dot:'#F08880' },
+  { id:'anchovy',   name:'Anchovy',      tex:'tex-anchovy',   dot:'#3A1810' },
+  { id:'shrimp',    name:'Shrimp',       tex:'tex-shrimp',    dot:'#E87070' },
+  { id:'chicken',   name:'Chicken',      tex:'tex-chicken',   dot:'#E8C880' },
+  { id:'eggplant',  name:'Eggplant',     tex:'tex-eggplant',  dot:'#5A1880' },
+];
+
+function svgMan(hair, shirt, skin='#F4C896', extras='') {
+  return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+    <rect x="22" y="90" width="56" height="68" rx="10" fill="${shirt}"/>
+    <rect x="43" y="84" width="14" height="10" rx="3" fill="${skin}"/>
+    <ellipse cx="50" cy="64" rx="27" ry="28" fill="${skin}"/>
+    <ellipse cx="50" cy="42" rx="27" ry="18" fill="${hair}"/>
+    <ellipse cx="26" cy="62" rx="8" ry="14" fill="${hair}"/>
+    <ellipse cx="74" cy="62" rx="8" ry="14" fill="${hair}"/>
+    <ellipse cx="41" cy="64" rx="4" ry="4.5" fill="#3D2B1F"/>
+    <ellipse cx="59" cy="64" rx="4" ry="4.5" fill="#3D2B1F"/>
+    <circle cx="42.5" cy="62.5" r="1.3" fill="white"/>
+    <circle cx="60.5" cy="62.5" r="1.3" fill="white"/>
+    <path d="M 37 57 L 45 56" stroke="#4A2010" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 55 56 L 63 57" stroke="#4A2010" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="50" cy="70" rx="2.5" ry="1.5" fill="#D09860"/>
+    <ellipse cx="35" cy="71" rx="6" ry="4" fill="#F09080" opacity="0.4"/>
+    <ellipse cx="65" cy="71" rx="6" ry="4" fill="#F09080" opacity="0.4"/>
+    <path d="M 44 78 Q 50 85 56 78" stroke="#B06030" stroke-width="2" fill="none" stroke-linecap="round"/>
+    ${extras}
+    <rect x="2" y="93" width="22" height="13" rx="6" fill="${shirt}"/>
+    <ellipse cx="5" cy="99" rx="5" ry="6" fill="${skin}"/>
+    <rect x="76" y="93" width="22" height="13" rx="6" fill="${shirt}"/>
+    <ellipse cx="95" cy="99" rx="5" ry="6" fill="${skin}"/>
+  </svg>`;
+}
+
+function svgWoman(hair, shirt, skin='#F4C896', hairStyle='long', extras='') {
+  const longHair = hairStyle==='long' ? `<ellipse cx="79" cy="80" rx="9" ry="26" fill="${hair}"/>` : '';
+  const bunHair  = hairStyle==='bun'  ? `<ellipse cx="50" cy="36" rx="18" ry="13" fill="${hair}"/><circle cx="50" cy="29" r="10" fill="${hair}"/>` : '';
+  return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+    ${longHair}
+    <rect x="22" y="90" width="56" height="68" rx="10" fill="${shirt}"/>
+    <rect x="43" y="84" width="14" height="10" rx="3" fill="${skin}"/>
+    <ellipse cx="50" cy="64" rx="27" ry="28" fill="${skin}"/>
+    <ellipse cx="50" cy="42" rx="28" ry="19" fill="${hair}"/>
+    <ellipse cx="26" cy="64" rx="9" ry="17" fill="${hair}"/>
+    <ellipse cx="74" cy="64" rx="9" ry="17" fill="${hair}"/>
+    ${bunHair}
+    <ellipse cx="41" cy="64" rx="3.8" ry="4.5" fill="#3D2B1F"/>
+    <ellipse cx="59" cy="64" rx="3.8" ry="4.5" fill="#3D2B1F"/>
+    <circle cx="42.5" cy="62.5" r="1.3" fill="white"/>
+    <circle cx="60.5" cy="62.5" r="1.3" fill="white"/>
+    <path d="M 37 57 Q 41 55 45 57" stroke="#8A3820" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M 55 57 Q 59 55 63 57" stroke="#8A3820" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="70" rx="2.5" ry="1.5" fill="#E0A870"/>
+    <ellipse cx="35" cy="71" rx="6" ry="4" fill="#F0A088" opacity="0.5"/>
+    <ellipse cx="65" cy="71" rx="6" ry="4" fill="#F0A088" opacity="0.5"/>
+    <path d="M 43 79 Q 50 87 57 79" stroke="#C06828" stroke-width="2" fill="none" stroke-linecap="round"/>
+    ${extras}
+    <rect x="2" y="93" width="22" height="13" rx="6" fill="${shirt}"/>
+    <ellipse cx="5" cy="99" rx="5" ry="6" fill="${skin}"/>
+    <rect x="76" y="93" width="22" height="13" rx="6" fill="${shirt}"/>
+    <ellipse cx="95" cy="99" rx="5" ry="6" fill="${skin}"/>
+  </svg>`;
+}
+
+function svgKid(hair, shirt, skin='#F4C896', extras='') {
+  return `<svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+    <rect x="24" y="92" width="52" height="56" rx="10" fill="${shirt}"/>
+    <rect x="43" y="86" width="14" height="10" rx="3" fill="${skin}"/>
+    <ellipse cx="50" cy="64" rx="31" ry="32" fill="${skin}"/>
+    <ellipse cx="50" cy="39" rx="31" ry="20" fill="${hair}"/>
+    <ellipse cx="24" cy="66" rx="10" ry="18" fill="${hair}"/>
+    <ellipse cx="76" cy="66" rx="10" ry="18" fill="${hair}"/>
+    <ellipse cx="40" cy="66" rx="4.5" ry="5" fill="#3D2B1F"/>
+    <ellipse cx="60" cy="66" rx="4.5" ry="5" fill="#3D2B1F"/>
+    <circle cx="41.5" cy="64" r="1.5" fill="white"/>
+    <circle cx="61.5" cy="64" r="1.5" fill="white"/>
+    <path d="M 35 58 Q 40 55 45 58" stroke="#8A3820" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M 55 58 Q 60 55 65 58" stroke="#8A3820" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="72" rx="3" ry="2" fill="#E0A870"/>
+    <ellipse cx="34" cy="74" rx="8" ry="5" fill="#F0A088" opacity="0.55"/>
+    <ellipse cx="66" cy="74" rx="8" ry="5" fill="#F0A088" opacity="0.55"/>
+    <path d="M 42 82 Q 50 91 58 82" stroke="#C06828" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    ${extras}
+    <rect x="2" y="95" width="24" height="12" rx="6" fill="${shirt}"/>
+    <ellipse cx="5" cy="101" rx="5" ry="6" fill="${skin}"/>
+    <rect x="74" y="95" width="24" height="12" rx="6" fill="${shirt}"/>
+    <ellipse cx="95" cy="101" rx="5" ry="6" fill="${skin}"/>
+  </svg>`;
+}
+
+const glasses     = `<rect x="30" y="61" width="16" height="11" rx="5" fill="none" stroke="#4A3828" stroke-width="2"/><rect x="54" y="61" width="16" height="11" rx="5" fill="none" stroke="#4A3828" stroke-width="2"/><line x1="46" y1="66" x2="54" y2="66" stroke="#4A3828" stroke-width="2"/>`;
+const beard       = (c) => `<ellipse cx="50" cy="82" rx="18" ry="10" fill="${c}"/><ellipse cx="38" cy="78" rx="8" ry="8" fill="${c}"/><ellipse cx="62" cy="78" rx="8" ry="8" fill="${c}"/>`;
+const cap         = (c) => `<rect x="18" y="38" width="64" height="22" rx="8" fill="${c}"/><rect x="10" y="52" width="80" height="10" rx="5" fill="${c}"/>`;
+const beanie      = (c) => `<ellipse cx="50" cy="38" rx="30" ry="20" fill="${c}"/><rect x="20" y="50" width="60" height="10" rx="3" fill="${c}"/><ellipse cx="50" cy="26" rx="10" ry="10" fill="${c}"/>`;
+const pigtails    = (h) => `<circle cx="14" cy="60" r="10" fill="${h}"/><circle cx="86" cy="60" r="10" fill="${h}"/>`;
+const oldWrinkles = `<path d="M 34 68 Q 38 70 42 68" stroke="rgba(0,0,0,0.1)" stroke-width="1.2" fill="none"/><path d="M 58 68 Q 62 70 66 68" stroke="rgba(0,0,0,0.1)" stroke-width="1.2" fill="none"/>`;
+
+const CUSTOMERS = [
+  { name:'Alex', isKid:false, dialogue:"Classic Meat please. Sauce, cheese, pepperoni and sausage. Nothing else.", order:{pizzaName:'Classic Meat',toppings:['sauce','cheese','pepperoni','sausage']}, money:9.00, get svg(){return svgMan('#6B3A20','#4A7AB8');} },
+  { name:'Maria', isKid:false, dialogue:"Hawaiian pizza! Yes, pineapple belongs on pizza and I will die on that hill. Ham and pineapple please!", order:{pizzaName:'Hawaiian Pizza',toppings:['sauce','cheese','ham','pineapple']}, money:9.00, get svg(){return svgWoman('#B84820','#D4608A');} },
+  { name:'Tommy', isKid:true, dialogue:"SUPREME PIZZA!! I want pepperoni, sausage, mushroom, olive, onion, bell pepper — ALL of it!!", order:{pizzaName:'Supreme Pizza',toppings:['sauce','cheese','pepperoni','sausage','mushroom','olive','onion','pepper']}, money:13.00, get svg(){return svgKid('#E8C030','#60A840');} },
+  { name:'Grandpa Joe', isKid:false, dialogue:"Vegan pizza please. No cheese, no meat at all. Mushroom, olive, onion, bell pepper, pineapple, basil and corn.", order:{pizzaName:'Vegan',toppings:['sauce','mushroom','olive','onion','pepper','pineapple','basil','corn']}, money:12.00, get svg(){return svgMan('#D0D0C0','#7A8898','#F0B880',glasses);} },
+  { name:'Grandma Rose', isKid:false, dialogue:"The vegetarian please — all the lovely toppings. Mushroom, olive, onion, bell pepper, pineapple, basil, corn. Cheese is fine, dear.", order:{pizzaName:'Vegetarian',toppings:['sauce','cheese','mushroom','olive','onion','pepper','pineapple','basil','corn']}, money:13.00, get svg(){return svgWoman('#C8C8C0','#9060A8','#F0B880','bun',oldWrinkles);} },
+  { name:'Jake', isKid:false, dialogue:"Meat Lover's. Pepperoni, sausage, bacon, ham. No fish, no shrimp. Pure meat only.", order:{pizzaName:"Meat Lover's",toppings:['sauce','cheese','pepperoni','sausage','bacon','ham']}, money:11.00, get svg(){return svgMan('#1A1410','#2A2A3A','#8B5E3C',cap('#1A2038'));} },
+  { name:'Nina', isKid:false, dialogue:"Green Dream. Bell pepper and basil only. I have a meeting in 15 minutes — keep it quick and simple.", order:{pizzaName:'Green Dream',toppings:['sauce','cheese','pepper','basil']}, money:8.00, get svg(){return svgWoman('#1A1A1A','#2C3E6A','#C4884C','bun');} },
+  { name:'Marco', isKid:false, dialogue:"Breakfast pizza! Sausage, mushroom, onion, bacon, ham — the whole brunch situation.", order:{pizzaName:'Breakfast Pizza',toppings:['sauce','cheese','sausage','mushroom','onion','bacon','ham']}, money:12.00, get svg(){return svgMan('#3A2010','#8B5030','#F4C896',beanie('#3A3430')+beard('#4A2810'));} },
+  { name:'Lily', isKid:true, dialogue:"FRUITY PIG!! Pepperoni, sausage, olive, bell pepper, bacon, pineapple and ham!! Dad said I could pick!!", order:{pizzaName:'Fruity Pig',toppings:['sauce','cheese','pepperoni','sausage','olive','pepper','bacon','pineapple','ham']}, money:14.00, get svg(){return svgKid('#5A3010','#E860A0','#F8D0A0',pigtails('#5A3010'));} },
+  { name:'Bruno', isKid:false, dialogue:"All-Dressed. Sauce, cheese, pepperoni, sausage, mushroom, olive, onion, bell pepper, bacon, pineapple, anchovy, ham, basil, shrimp, corn, chicken. ALL SIXTEEN. Read it back.", order:{pizzaName:'All-Dressed Pizza',toppings:['sauce','cheese','pepperoni','sausage','mushroom','olive','onion','pepper','bacon','pineapple','anchovy','ham','basil','shrimp','corn','chicken']}, money:22.00, get svg(){return svgMan('#2A1A10','#4A7840','#D0956A');} },
+];
+
+const state = { added:new Set(), order:null, pizzaName:'', customerIdx:0, score:0, money:0, served:false, totalRounds:CUSTOMERS.length };
+
+function seededRand(seed) { let s=seed; return ()=>{s=(s*16807)%2147483647;return(s-1)/2147483646;}; }
+
+const canvas = document.getElementById('pizza-canvas');
+const ctx = canvas.getContext('2d');
+const CX=110, CY=110, R=100;
+
+function drawPizza() {
+  ctx.clearRect(0,0,220,220);
+  const a=state.added;
+  ctx.save(); ctx.shadowColor='rgba(0,0,0,0.22)'; ctx.shadowBlur=16; ctx.shadowOffsetY=5;
+  ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2); ctx.fillStyle='#DBA840'; ctx.fill(); ctx.restore();
+  ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2); ctx.fillStyle='#DBA840'; ctx.fill();
+  ctx.beginPath(); ctx.arc(CX,CY,R-13,0,Math.PI*2); ctx.fillStyle='#EEC858'; ctx.fill();
+  const dt=seededRand(9); for(let i=0;i<16;i++){const ang=dt()*Math.PI*2,d=(R-4)-dt()*8;ctx.beginPath();ctx.arc(CX+Math.cos(ang)*d,CY+Math.sin(ang)*d,1.5+dt()*2,0,Math.PI*2);ctx.fillStyle='rgba(150,80,15,0.18)';ctx.fill();}
+  if(a.has('sauce')){ctx.beginPath();ctx.arc(CX,CY,R-15,0,Math.PI*2);ctx.fillStyle='#C03020';ctx.fill();const sr=seededRand(55);for(let i=0;i<10;i++){const ang=sr()*Math.PI*2,d=sr()*(R-18);ctx.beginPath();ctx.arc(CX+Math.cos(ang)*d,CY+Math.sin(ang)*d,3+sr()*5,0,Math.PI*2);ctx.fillStyle='rgba(150,15,10,0.2)';ctx.fill();}}
+  if(a.has('cheese')){const cr=seededRand(42);ctx.fillStyle='#F5E090';for(let i=0;i<20;i++){const ang=cr()*Math.PI*2,d=cr()*(R-17),rx=7+cr()*17,ry=5+cr()*11;ctx.save();ctx.translate(CX+Math.cos(ang)*d,CY+Math.sin(ang)*d);ctx.rotate(cr()*Math.PI);ctx.beginPath();ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);ctx.fill();ctx.restore();}}
+  if(a.has('pepperoni')){const pr=seededRand(123);for(let i=0;i<9;i++){const ang=pr()*Math.PI*2,d=pr()*(R-26),px=CX+Math.cos(ang)*d,py=CY+Math.sin(ang)*d;ctx.beginPath();ctx.arc(px,py,12,0,Math.PI*2);ctx.fillStyle='#9B2335';ctx.fill();ctx.beginPath();ctx.arc(px,py,7,0,Math.PI*2);ctx.fillStyle='#7A1A28';ctx.fill();const s2=seededRand(pr()*999+i);for(let j=0;j<4;j++){const sa=s2()*Math.PI*2,sd=s2()*8;ctx.beginPath();ctx.arc(px+Math.cos(sa)*sd,py+Math.sin(sa)*sd,1.4,0,Math.PI*2);ctx.fillStyle='#501015';ctx.fill();}}}
+  if(a.has('mushroom')){const mr=seededRand(77);for(let i=0;i<8;i++){const ang=mr()*Math.PI*2,d=mr()*(R-24),mx=CX+Math.cos(ang)*d,my=CY+Math.sin(ang)*d;ctx.save();ctx.translate(mx,my);ctx.rotate(mr()*Math.PI);ctx.beginPath();ctx.ellipse(0,-4,10,7,0,Math.PI,Math.PI*2);ctx.fillStyle='#9E7A55';ctx.fill();ctx.fillRect(-3,-4,6,9);ctx.beginPath();ctx.ellipse(0,-4,10,7,0,Math.PI,Math.PI*2);ctx.fillStyle='#BA9065';ctx.fill();ctx.restore();}}
+  if(a.has('olive')){const or=seededRand(200);for(let i=0;i<9;i++){const ang=or()*Math.PI*2,d=or()*(R-24),ox=CX+Math.cos(ang)*d,oy=CY+Math.sin(ang)*d;ctx.beginPath();ctx.arc(ox,oy,8,0,Math.PI*2);ctx.fillStyle='#2A2010';ctx.fill();ctx.beginPath();ctx.arc(ox,oy,4,0,Math.PI*2);ctx.fillStyle='#5A4828';ctx.fill();}}
+  if(a.has('pepper')){const gr=seededRand(300);for(let i=0;i<13;i++){const ang=gr()*Math.PI*2,d=gr()*(R-22),gx=CX+Math.cos(ang)*d,gy=CY+Math.sin(ang)*d;ctx.save();ctx.translate(gx,gy);ctx.rotate(gr()*Math.PI);ctx.fillStyle='#2E9E48';ctx.beginPath();ctx.roundRect(-7,-2.5,14,5,2);ctx.fill();ctx.restore();}}
+  if(a.has('onion')){const nr=seededRand(400);for(let i=0;i<11;i++){const ang=nr()*Math.PI*2,d=nr()*(R-22),nx=CX+Math.cos(ang)*d,ny=CY+Math.sin(ang)*d;ctx.save();ctx.translate(nx,ny);ctx.rotate(nr()*Math.PI);ctx.beginPath();ctx.ellipse(0,0,9,4.5,0,0,Math.PI);ctx.strokeStyle='#9B52C0';ctx.lineWidth=2.5;ctx.stroke();ctx.beginPath();ctx.ellipse(0,0,6,3,0,0,Math.PI);ctx.strokeStyle='#C070E0';ctx.lineWidth=1.5;ctx.stroke();ctx.restore();}}
+  if(a.has('basil')){const br=seededRand(500);for(let i=0;i<7;i++){const ang=br()*Math.PI*2,d=br()*(R-22),bx=CX+Math.cos(ang)*d,by=CY+Math.sin(ang)*d;ctx.save();ctx.translate(bx,by);ctx.rotate(br()*Math.PI*2);ctx.beginPath();ctx.ellipse(0,0,11,6,0,0,Math.PI*2);ctx.fillStyle='#22A040';ctx.fill();ctx.beginPath();ctx.moveTo(-11,0);ctx.bezierCurveTo(-5,-5,5,-5,11,0);ctx.strokeStyle='#186030';ctx.lineWidth=1.4;ctx.stroke();ctx.restore();}}
+  if(a.has('sausage')){const sr=seededRand(800);for(let i=0;i<8;i++){const ang=sr()*Math.PI*2,d=sr()*(R-26),sx=CX+Math.cos(ang)*d,sy=CY+Math.sin(ang)*d;ctx.beginPath();ctx.arc(sx,sy,14,0,Math.PI*2);ctx.fillStyle='#8B4428';ctx.fill();ctx.beginPath();ctx.arc(sx,sy,9,0,Math.PI*2);ctx.fillStyle='#6B3018';ctx.fill();ctx.strokeStyle='#5A2510';ctx.lineWidth=1;ctx.beginPath();ctx.arc(sx,sy,11,0.3,1.2);ctx.stroke();ctx.beginPath();ctx.arc(sx,sy,11,3.5,4.4);ctx.stroke();}}
+  if(a.has('bacon')){const br=seededRand(900);for(let i=0;i<8;i++){const ang=br()*Math.PI*2,d=br()*(R-24),bx=CX+Math.cos(ang)*d,by=CY+Math.sin(ang)*d;ctx.save();ctx.translate(bx,by);ctx.rotate(br()*Math.PI);ctx.fillStyle='#E86868';ctx.fillRect(-16,-4,32,8);ctx.fillStyle='#F4A090';ctx.fillRect(-16,-1.5,32,3);ctx.fillStyle='#D84848';ctx.fillRect(-16,-4,32,2.5);ctx.restore();}}
+  if(a.has('ham')){const hr=seededRand(1100);for(let i=0;i<9;i++){const ang=hr()*Math.PI*2,d=hr()*(R-24),hx=CX+Math.cos(ang)*d,hy=CY+Math.sin(ang)*d;ctx.save();ctx.translate(hx,hy);ctx.rotate(hr()*Math.PI);ctx.fillStyle='#F08880';ctx.beginPath();ctx.roundRect(-10,-10,20,20,3);ctx.fill();ctx.strokeStyle='#D06050';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(-10,-10,20,20,3);ctx.stroke();ctx.restore();}}
+  if(a.has('anchovy')){const ar=seededRand(1000);for(let i=0;i<10;i++){const ang=ar()*Math.PI*2,d=ar()*(R-24),ax=CX+Math.cos(ang)*d,ay=CY+Math.sin(ang)*d;ctx.save();ctx.translate(ax,ay);ctx.rotate(ar()*Math.PI);ctx.strokeStyle='#2A1808';ctx.lineWidth=3.5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-13,0);ctx.bezierCurveTo(-6,-7,6,-7,13,0);ctx.stroke();ctx.strokeStyle='#4A2818';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-13,0);ctx.bezierCurveTo(-6,-4,6,-4,13,0);ctx.stroke();ctx.restore();}}
+  if(a.has('shrimp')){const shr=seededRand(1200);for(let i=0;i<8;i++){const ang=shr()*Math.PI*2,d=shr()*(R-24),sx=CX+Math.cos(ang)*d,sy=CY+Math.sin(ang)*d;ctx.save();ctx.translate(sx,sy);ctx.rotate(shr()*Math.PI*2);ctx.strokeStyle='#E87070';ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.arc(0,0,9,0.3,Math.PI-0.3);ctx.stroke();ctx.strokeStyle='#F8A090';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,9,0.3,Math.PI-0.3);ctx.stroke();ctx.restore();}}
+  if(a.has('chicken')){const chr=seededRand(1300);for(let i=0;i<9;i++){const ang=chr()*Math.PI*2,d=chr()*(R-24),chx=CX+Math.cos(ang)*d,chy=CY+Math.sin(ang)*d;ctx.beginPath();ctx.ellipse(chx,chy,10+chr()*8,6+chr()*5,chr()*Math.PI,0,Math.PI*2);ctx.fillStyle='#E8C880';ctx.fill();ctx.beginPath();ctx.ellipse(chx,chy,7+chr()*5,4+chr()*3,chr()*Math.PI,0,Math.PI*2);ctx.fillStyle='#D0A040';ctx.fill();}}
+  if(a.has('pineapple')){const pnr=seededRand(600);for(let i=0;i<10;i++){const ang=pnr()*Math.PI*2,d=pnr()*(R-22),px=CX+Math.cos(ang)*d,py=CY+Math.sin(ang)*d;ctx.save();ctx.translate(px,py);ctx.rotate(pnr()*Math.PI);ctx.beginPath();ctx.moveTo(0,-12);ctx.lineTo(10,7);ctx.lineTo(-10,7);ctx.closePath();ctx.fillStyle='#F0C020';ctx.fill();ctx.beginPath();ctx.moveTo(0,-7);ctx.lineTo(6,5);ctx.lineTo(-6,5);ctx.closePath();ctx.fillStyle='#D8A810';ctx.fill();ctx.strokeStyle='#C09000';ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(0,-7);ctx.lineTo(0,5);ctx.stroke();ctx.restore();}}
+  if(a.has('corn')){const cnr=seededRand(700);for(let i=0;i<9;i++){const ang=cnr()*Math.PI*2,d=cnr()*(R-22),knx=CX+Math.cos(ang)*d,kny=CY+Math.sin(ang)*d;ctx.save();ctx.translate(knx,kny);ctx.rotate(cnr()*Math.PI);for(let row=0;row<3;row++){for(let col=0;col<4;col++){ctx.beginPath();ctx.ellipse(-7+col*5,-5+row*5,2.2,2.8,0,0,Math.PI*2);ctx.fillStyle='#F0C820';ctx.fill();ctx.strokeStyle='#C09810';ctx.lineWidth=0.5;ctx.stroke();}}ctx.restore();}}
+  if(a.has('eggplant')){const er=seededRand(1400);for(let i=0;i<8;i++){const ang=er()*Math.PI*2,d=er()*(R-22),ex=CX+Math.cos(ang)*d,ey=CY+Math.sin(ang)*d;ctx.save();ctx.translate(ex,ey);ctx.rotate(er()*Math.PI);ctx.beginPath();ctx.ellipse(0,0,10,14,0,0,Math.PI*2);ctx.fillStyle='#5A1888';ctx.fill();ctx.beginPath();ctx.ellipse(0,0,7,10,0,0,Math.PI*2);ctx.fillStyle='#7A28A8';ctx.fill();ctx.beginPath();ctx.ellipse(0,0,3,5,0,0,Math.PI*2);ctx.fillStyle='#F0EEF8';ctx.fill();ctx.restore();}}
+}
+
+function showCounterScene() {
+  const c=CUSTOMERS[state.customerIdx];
+  document.getElementById('customer-text').textContent=c.dialogue;
+  document.getElementById('hint-text').textContent=INGREDIENTS.filter(i=>c.order.toppings.includes(i.id)).map(i=>i.name).join(', ');
+  document.getElementById('hint-bubble').classList.add('hidden');
+  const custEl=document.getElementById('cs-customer');
+  custEl.innerHTML=c.svg; custEl.className='cs-customer'+(c.isKid?' kid':'');
+  document.getElementById('cs-name-tag').textContent=c.name;
+  const bubble=document.getElementById('speech-bubble');
+  bubble.style.animation='none'; void bubble.offsetWidth; bubble.style.animation='';
+  document.getElementById('counter-scene').classList.remove('hidden');
+  document.getElementById('kitchen-scene').classList.add('hidden');
+  document.getElementById('feedback-overlay').classList.add('hidden');
+}
+
+function showHint() { document.getElementById('hint-bubble').classList.remove('hidden'); }
+
+function goToKitchen() {
+  const c=CUSTOMERS[state.customerIdx];
+  state.order=c.order.toppings; state.pizzaName=c.order.pizzaName;
+  state.added.clear(); state.served=false;
+  document.getElementById('counter-scene').classList.add('hidden');
+  document.getElementById('kitchen-scene').classList.remove('hidden');
+  renderIngredients(); renderTicket(); drawPizza();
+}
+
+function renderIngredients() {
+  const panel=document.getElementById('ingredients-panel');
+  panel.innerHTML='';
+  for(const ing of INGREDIENTS){
+    const card=document.createElement('div');
+    card.className='ing-card'+(state.added.has(ing.id)?' selected':'');
+    card.innerHTML=`<div class="ing-texture ${ing.tex}"><div class="ing-check">✓</div></div><div class="ing-label">${ing.name}</div>`;
+    card.addEventListener('click',()=>toggleIngredient(ing.id));
+    panel.appendChild(card);
+  }
+}
+
+function renderTicket() {
+  document.getElementById('ticket-pizza-name').textContent=state.pizzaName||'';
+  const container=document.getElementById('ticket-items');
+  container.innerHTML='';
+  for(const id of state.order){
+    const ing=INGREDIENTS.find(i=>i.id===id);
+    const item=document.createElement('div');
+    item.className='ticket-item'+(state.added.has(id)?' done':'');
+    item.innerHTML=`<div class="ti-dot" style="background:${ing.dot}"></div>${ing.name}`;
+    container.appendChild(item);
+  }
+}
+
+function toggleIngredient(id) {
+  if(state.served) return;
+  if(state.added.has(id)) state.added.delete(id); else state.added.add(id);
+  renderIngredients(); renderTicket(); drawPizza();
+}
+
+function clearPizza() {
+  if(state.served) return;
+  state.added.clear(); renderIngredients(); renderTicket(); drawPizza();
+}
+
+function servePizza() {
+  if(state.served) return;
+  state.served=true;
+  const order=new Set(state.order);
+  let correct=0,missing=0,extra=0;
+  for(const id of order){if(state.added.has(id)) correct++; else missing++;}
+  for(const id of state.added){if(!order.has(id)) extra++;}
+  const maxPts=order.size*10;
+  const pts=Math.max(0,correct*10-missing*5-extra*5);
+  state.score+=pts;
+  const pct=pts/maxPts;
+  const customer=CUSTOMERS[state.customerIdx];
+  const earned=pct>=1?customer.money:pct>=0.6?customer.money*0.7:customer.money*0.3;
+  state.money+=earned;
+  const mood=Math.max(0,parseInt(document.getElementById('hud-mood').textContent)-(missing+extra)*7);
+  document.getElementById('hud-mood').textContent=mood+'%';
+  document.getElementById('hud-coins').textContent=state.customerIdx+1;
+  document.getElementById('hud-money').textContent=state.money.toFixed(2);
+  const emoji=pct===1?'⭐':pct>=0.6?'😊':pct>0?'😐':'😬';
+  const title=pct===1?'Perfect!':pct>=0.6?'Pretty good!':pct>0?'Hmm...':'Wrong order!';
+  const sub=pct===1?'Exactly what they wanted!':pct>=0.6?`${customer.name} seems okay with it.`:pct>0?'They ate it... reluctantly.':'Sent it straight back.';
+  const stars=pct===1?'★★★':pct>=0.6?'★★☆':pct>0?'★☆☆':'☆☆☆';
+  const isLast=state.customerIdx>=state.totalRounds-1;
+  let details=[];
+  if(missing>0) details.push(`Missing: ${missing} topping${missing>1?'s':''}`);
+  if(extra>0) details.push(`Extra: ${extra} topping${extra>1?'s':''}`);
+  document.getElementById('feedback-card').innerHTML=`
+    <div class="fb-emoji">${emoji}</div>
+    <div class="fb-stars">${stars}</div>
+    <div class="fb-title">${title}</div>
+    <div class="fb-sub">${sub}</div>
+    <div class="fb-pts">+$${earned.toFixed(2)}</div>
+    ${details.length?`<div class="fb-detail">${details.join(' · ')}</div>`:''}
+    <button class="btn-next" onclick="${isLast?'showGameOver()':'nextCustomer()'}">
+      ${isLast?'Close Up Shop':'Next Customer →'}
+    </button>`;
+  document.getElementById('feedback-overlay').classList.remove('hidden');
+}
+
+function nextCustomer() {
+  state.customerIdx++;
+  document.getElementById('hud-day').textContent=state.customerIdx+1;
+  showCounterScene();
+}
+
+function showGameOver() {
+  const maxMoney=CUSTOMERS.reduce((s,c)=>s+c.money,0);
+  const pct=state.money/maxMoney;
+  const stars=pct>=0.85?'★★★':pct>=0.55?'★★☆':'★☆☆';
+  const msg=pct>=0.85?'You run a tight kitchen!':pct>=0.55?'A solid day of work.':'Room to improve.';
+  document.getElementById('feedback-card').innerHTML=`
+    <div class="fb-emoji">🍕</div>
+    <div class="fb-stars" style="font-size:2rem">${stars}</div>
+    <div class="fb-title">Kitchen Closed!</div>
+    <div class="fb-sub">${msg}</div>
+    <div class="fb-pts">$${state.money.toFixed(2)} earned</div>
+    <div class="fb-detail">Served all ${state.totalRounds} customers today.</div>
+    <button class="btn-next" onclick="restartGame()">Open Tomorrow →</button>`;
+}
+
+function restartGame() {
+  state.added.clear(); state.score=0; state.money=0;
+  state.customerIdx=0; state.served=false; state.pizzaName='';
+  document.getElementById('hud-day').textContent='1';
+  document.getElementById('hud-mood').textContent='100%';
+  document.getElementById('hud-coins').textContent='0';
+  document.getElementById('hud-money').textContent='0.00';
+  showCounterScene();
+}
+
+showCounterScene();
+document.addEventListener('keydown', e => {
+  if(document.getElementById('counter-scene').classList.contains('hidden')) return;
+  if(e.key==='a'||e.key==='A'||e.key==='Enter') goToKitchen();
+  if(e.key==='b'||e.key==='B') showHint();
+});
+</script>
