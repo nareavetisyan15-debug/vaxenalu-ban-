@@ -34,122 +34,260 @@
 
   /* ── COUNTER SCENE ── */
   .cs-wrap { flex: 1; position: relative; overflow: hidden; }
+
+  /* Brick wall — warm terracotta with horizontal mortar lines */
   .cs-wall {
-    position: absolute; inset: 0 0 32% 0;
+    position: absolute; inset: 0 0 34% 0;
     background:
-      repeating-linear-gradient(transparent 0, transparent 22px, rgba(0,0,0,0.06) 22px, rgba(0,0,0,0.06) 24px),
-      repeating-linear-gradient(90deg, transparent 0, transparent 48px, rgba(0,0,0,0.045) 48px, rgba(0,0,0,0.045) 50px),
-      #C07068;
+      repeating-linear-gradient(
+        transparent 0px, transparent 28px,
+        rgba(90,40,20,0.22) 28px, rgba(90,40,20,0.22) 32px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(90,40,20,0.12) 0px, rgba(90,40,20,0.12) 2px,
+        transparent 2px, transparent 60px
+      ),
+      linear-gradient(180deg, #B05030 0%, #C86040 40%, #B85838 100%);
   }
+
+  /* Stone pizza oven on the right */
+  .cs-oven {
+    position: absolute; right: 0; top: 0; bottom: 34%;
+    width: 160px;
+    background: linear-gradient(160deg, #6A5040 0%, #504030 60%, #3A2820 100%);
+    border-left: 6px solid #2A1810;
+    z-index: 2;
+  }
+  .cs-oven::before {
+    content: ''; position: absolute;
+    top: 18%; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 90px;
+    background: radial-gradient(ellipse at 50% 100%, #FF6010 0%, #FF3800 30%, #CC2000 55%, #1A0808 80%);
+    border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+    box-shadow: 0 0 30px 10px rgba(255,80,10,0.5), inset 0 -10px 20px rgba(0,0,0,0.6);
+  }
+  .cs-oven::after {
+    content: ''; position: absolute;
+    top: calc(18% + 90px); left: 50%; transform: translateX(-50%);
+    width: 100px; height: 14px;
+    background: linear-gradient(180deg, #3A2820, #1A0C08);
+    border-radius: 0 0 8px 8px;
+  }
+  .cs-oven-chimney {
+    position: absolute; top: 0; right: 28px; width: 28px; height: 18%;
+    background: linear-gradient(90deg, #7A5838, #5A3820, #7A5838);
+    border-radius: 4px 4px 0 0;
+  }
+  .cs-oven-arch-label {
+    position: absolute; top: calc(18% - 18px); left: 50%; transform: translateX(-50%);
+    font-size: 0.45rem; font-weight: 900; letter-spacing: 1.5px; color: rgba(255,200,120,0.6);
+    text-transform: uppercase; white-space: nowrap;
+  }
+
+  /* Hanging lamp from top-center */
+  .cs-lamp {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    z-index: 10; display: flex; flex-direction: column; align-items: center;
+  }
+  .cs-lamp-cord {
+    width: 3px; height: 32px;
+    background: linear-gradient(180deg, #2A1A0A, #5A3820);
+    border-radius: 2px;
+  }
+  .cs-lamp-shade {
+    width: 52px; height: 34px;
+    background: linear-gradient(180deg, #2A1A08 0%, #4A2810 50%, #6A3A14 100%);
+    border-radius: 0 0 50% 50% / 0 0 80% 80%;
+    box-shadow: 0 0 22px 10px rgba(255,200,80,0.45), inset 0 4px 10px rgba(255,180,60,0.3);
+    position: relative;
+  }
+  .cs-lamp-shade::after {
+    content: ''; position: absolute;
+    bottom: -6px; left: 50%; transform: translateX(-50%);
+    width: 10px; height: 10px; border-radius: 50%;
+    background: radial-gradient(circle, #FFF0A0, #FFD040);
+    box-shadow: 0 0 16px 8px rgba(255,210,60,0.5);
+  }
+
+  /* Wooden floor planks */
   .cs-floor {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 32%;
-    background: repeating-conic-gradient(#EAC4BC 0% 25%, #DCAAA0 0% 50%) 0 0 / 42px 42px;
-  }
-  .cs-table { position: absolute; background: #5A2828; border-radius: 50%; }
-  .cs-table.t1 { width: 90px; height: 44px; bottom: 31%; left: 38%; }
-  .cs-table.t2 { width: 76px; height: 38px; bottom: 31%; left: 59%; }
-  .cs-chair { position: absolute; width: 24px; height: 36px; background: #3A1818; border-radius: 4px 4px 0 0; bottom: calc(31% - 10px); }
-  .cs-chair.c1 { left: 38%; } .cs-chair.c2 { left: 45%; }
-  .cs-chair.c3 { left: 58%; } .cs-chair.c4 { left: 65%; }
-  .cs-frame { position: absolute; top: 10px; background: #8A4838; border: 3px solid #6A3020; border-radius: 3px; }
-  .cs-frame.f1 { right: 90px; width: 70px; height: 52px; }
-  .cs-frame.f2 { right: 20px; width: 54px; height: 42px; top: 8px; }
-  .cs-frame.f1::after { content:''; position:absolute; inset:6px; background:#A05840; border-radius:1px; }
-  .cs-counter {
-    position: absolute; bottom: 28%; left: 0; right: 0; height: 82px;
+    position: absolute; bottom: 0; left: 0; right: 0; height: 34%;
     background:
-      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.03) 4px, rgba(0,0,0,0.03) 8px),
-      linear-gradient(180deg, #D8A858 0%, #A87830 100%);
-    border-top: 5px solid #F0CC70; border-bottom: 7px solid #784818;
-    display: flex; align-items: flex-start; padding: 0 24px; gap: 18px;
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 1px,
+        transparent 1px, transparent 80px,
+        rgba(0,0,0,0.08) 80px, rgba(0,0,0,0.08) 82px,
+        transparent 82px, transparent 160px
+      ),
+      repeating-linear-gradient(
+        180deg,
+        rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px,
+        transparent 1px, transparent 18px
+      ),
+      linear-gradient(180deg, #C87838 0%, #A05C28 60%, #884A18 100%);
+  }
+
+  /* Thick wooden counter */
+  .cs-counter {
+    position: absolute; bottom: 30%; left: 0; right: 0; height: 100px;
+    background:
+      repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 1px,
+        transparent 1px, transparent 12px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px,
+        transparent 1px, transparent 6px
+      ),
+      linear-gradient(180deg, #E8B860 0%, #C88A30 40%, #A06818 100%);
+    border-top: 6px solid #F5D080;
+    border-bottom: 8px solid #6A3E10;
+    box-shadow: 0 -4px 18px rgba(0,0,0,0.18), 0 6px 14px rgba(0,0,0,0.3);
+    display: flex; align-items: flex-start; padding: 0 16px 0 180px; gap: 18px;
+    z-index: 5;
   }
   .cs-register {
-    width: 76px; height: 68px; background: #2E2818; border-radius: 6px 6px 0 0;
-    margin-top: -14px; position: relative; flex-shrink: 0;
+    width: 76px; height: 74px; background: #1E1608; border-radius: 6px 6px 0 0;
+    margin-top: -18px; position: relative; flex-shrink: 0;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
   }
-  .cs-register::before { content:''; position:absolute; top:8px; left:8px; right:8px; height:24px; background:#4A3828; border-radius:3px; }
-  .cs-register::after { content:''; position:absolute; bottom:0; left:8px; right:8px; height:10px; background:#1A1408; border-radius:2px 2px 0 0; }
+  .cs-register::before { content:''; position:absolute; top:8px; left:8px; right:8px; height:26px; background:#3A2818; border-radius:3px; border:1px solid #5A3828; }
+  .cs-register::after { content:''; position:absolute; bottom:0; left:8px; right:8px; height:12px; background:#0E0A04; border-radius:2px 2px 0 0; }
   .cs-counter-pizza {
-    width: 66px; height: 46px;
-    background: repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 6px), linear-gradient(#C49040, #A87028);
-    border-radius: 5px 5px 0 0; margin-top: -8px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    width: 72px; height: 52px;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(0,0,0,0.04) 5px, rgba(0,0,0,0.04) 10px),
+      linear-gradient(180deg, #C89040 0%, #A07028 100%);
+    border-radius: 6px 6px 0 0; margin-top: -10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
   }
   .cs-jar {
-    width: 28px; height: 40px; margin-top: 4px;
-    background: linear-gradient(180deg, rgba(180,220,200,0.8), rgba(140,180,160,0.6));
-    border: 2px solid rgba(100,140,120,0.6); border-radius: 4px 4px 6px 6px; position: relative;
+    width: 30px; height: 44px; margin-top: 4px;
+    background: linear-gradient(180deg, rgba(190,230,210,0.85), rgba(150,190,170,0.65));
+    border: 2px solid rgba(110,150,130,0.65); border-radius: 4px 4px 7px 7px; position: relative;
+    box-shadow: inset 2px 0 6px rgba(255,255,255,0.25);
   }
-  .cs-jar::before { content:''; position:absolute; top:-6px; left:4px; right:4px; height:8px; background:#8AAA90; border-radius:3px 3px 0 0; }
-  .cs-cat { position: absolute; right: 18px; bottom: calc(28% + 80px); font-size: 2.4rem; line-height:1; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2)); }
-  .cs-worker { position: absolute; left: 28px; bottom: calc(28% + 78px); width: 110px; filter: drop-shadow(3px 6px 10px rgba(0,0,0,0.25)); }
-  .cs-customer { position: absolute; right: 72px; bottom: calc(28% + 75px); width: 88px; filter: drop-shadow(3px 6px 10px rgba(0,0,0,0.25)); transition: opacity 0.2s; }
+  .cs-jar::before { content:''; position:absolute; top:-7px; left:5px; right:5px; height:9px; background:#8AAA90; border-radius:3px 3px 0 0; }
+
+  /* Award frames on wall */
+  .cs-frame { position: absolute; top: 12px; background: #7A3828; border: 3px solid #5A2010; border-radius: 4px; box-shadow: 2px 4px 12px rgba(0,0,0,0.35); }
+  .cs-frame.f1 { right: 180px; width: 68px; height: 54px; }
+  .cs-frame.f2 { right: 110px; width: 52px; height: 42px; top: 10px; }
+  .cs-frame.f1::before { content:'BEST'; position:absolute; top:6px; left:0; right:0; text-align:center; font-size:0.38rem; font-weight:900; letter-spacing:1px; color:rgba(255,220,140,0.85); text-transform:uppercase; }
+  .cs-frame.f1::after { content:'🏆'; position:absolute; bottom:5px; left:0; right:0; text-align:center; font-size:1rem; }
+  .cs-frame.f2::before { content:'🥇'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+
+  /* Cat decoration */
+  .cs-cat { position: absolute; right: 170px; bottom: calc(30% + 97px); font-size: 2.2rem; line-height:1; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.25)); z-index:6; }
+
+  /* Chef worker — behind counter */
+  .cs-worker {
+    position: absolute; left: 20px; bottom: calc(30% + 0px); width: 148px;
+    filter: drop-shadow(4px 8px 14px rgba(0,0,0,0.32)); z-index: 4;
+  }
+
+  /* Customer on right side */
+  .cs-customer { position: absolute; right: 180px; bottom: calc(30% + 95px); width: 88px; filter: drop-shadow(3px 6px 10px rgba(0,0,0,0.25)); transition: opacity 0.2s; z-index:6; }
   .cs-customer.kid { width: 70px; }
   .cs-name-tag {
-    position: absolute; bottom: calc(28% + 68px); right: 72px;
-    background: rgba(255,248,238,0.9); border: 1.5px solid #E2CDB4;
-    border-radius: 12px; padding: 3px 10px;
+    position: absolute; bottom: calc(30% + 88px); right: 180px;
+    background: rgba(255,248,238,0.95); border: 2px solid #D4A870;
+    border-radius: 14px; padding: 4px 12px;
     font-size: 0.65rem; font-weight: 800; color: var(--text-soft);
     letter-spacing: 0.5px; white-space: nowrap;
-    backdrop-filter: blur(4px); text-align: center; min-width: 88px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); text-align: center; min-width: 88px; z-index:7;
   }
+
+  /* Dialogue box — left/center area */
   .cs-dialogue {
-    position: absolute; top: 18px; left: 148px; right: 178px;
-    display: flex; flex-direction: column; gap: 12px; z-index: 20;
+    position: absolute; top: 12px; left: 160px; right: 286px;
+    display: flex; flex-direction: column; gap: 10px; z-index: 20;
   }
   .speech-bubble {
-    background: #FFF8EE; border: 3px solid #E0C8A0; border-radius: 22px;
-    padding: 16px 20px; position: relative;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    background: #FFFDF8; border: 3.5px solid #3D2B1F; border-radius: 22px;
+    padding: 14px 18px; position: relative;
+    box-shadow: 4px 6px 0px rgba(61,43,31,0.25);
     animation: bubbleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .speech-bubble::after {
-    content: ''; position: absolute; bottom: -20px; right: 24px;
-    border-top: 20px solid #FFF8EE; border-left: 16px solid transparent;
-    filter: drop-shadow(0 3px 0 #E0C8A0);
+    content: ''; position: absolute; bottom: -18px; right: 22px;
+    width: 0; height: 0;
+    border-left: 14px solid transparent;
+    border-right: 0px solid transparent;
+    border-top: 18px solid #3D2B1F;
+  }
+  .speech-bubble::before {
+    content: ''; position: absolute; bottom: -13px; right: 24px;
+    width: 0; height: 0;
+    border-left: 11px solid transparent;
+    border-top: 14px solid #FFFDF8;
+    z-index: 1;
   }
   @keyframes bubbleIn {
     from { transform: scale(0.88) translateY(-8px); opacity: 0; }
     to   { transform: scale(1) translateY(0); opacity: 1; }
   }
-  .speech-bubble p { font-size: 0.98rem; line-height: 1.6; color: var(--text); font-weight: 500; }
-  .hint-bubble { background: #EAF5EA; border: 2px dashed #90C890; border-radius: 14px; padding: 10px 14px; animation: bubbleIn 0.2s ease; }
+  .speech-bubble p { font-size: 0.9rem; line-height: 1.55; color: var(--text); font-weight: 600; }
+  .hint-bubble { background: #F0FAF0; border: 2.5px solid #60B060; border-radius: 14px; padding: 10px 14px; animation: bubbleIn 0.2s ease; }
   .hint-bubble.hidden { display: none; }
-  .hint-bubble p { font-size: 0.8rem; color: #2A6A2A; font-weight: 600; }
-  .hint-label { font-size: 0.62rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #508050; margin-bottom: 3px; }
-  .response-btns { display: flex; gap: 10px; margin-top: 4px; }
+  .hint-bubble p { font-size: 0.8rem; color: #1E6A1E; font-weight: 700; }
+  .hint-label { font-size: 0.62rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: #3A7A3A; margin-bottom: 3px; }
+  .response-btns { display: flex; gap: 8px; margin-top: 2px; }
   .btn-okay, .btn-what {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 20px; border-radius: 30px; font-family: inherit;
-    font-size: 0.92rem; font-weight: 700; cursor: pointer;
-    transition: all 0.15s; box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    display: flex; align-items: center; gap: 7px;
+    padding: 9px 16px; border-radius: 30px; font-family: inherit;
+    font-size: 0.85rem; font-weight: 800; cursor: pointer;
+    transition: all 0.15s; box-shadow: 3px 4px 0 rgba(61,43,31,0.2);
   }
-  .btn-okay { background:#FFF8EE; border:2.5px solid #E0C8A0; color:var(--text); flex:1.2; }
-  .btn-okay:hover { background:#FFF0D8; border-color:var(--accent); transform:translateY(-2px); }
-  .btn-what { background:#FFF8EE; border:2.5px solid #E0C8A0; color:var(--text-soft); flex:1; }
-  .btn-what:hover { background:#F5F0E8; transform:translateY(-2px); }
-  .btn-key { display:inline-flex; align-items:center; justify-content:center; width:21px; height:21px; background:#B09070; color:#FFF8EE; border-radius:50%; font-size:0.68rem; font-weight:900; flex-shrink:0; }
+  .btn-okay { background:#E8735A; border:2.5px solid #3D2B1F; color:#fff; flex:1.2; }
+  .btn-okay:hover { background:#C85A42; transform:translateY(-2px); }
+  .btn-what { background:#FFFDF8; border:2.5px solid #3D2B1F; color:var(--text); flex:1; }
+  .btn-what:hover { background:#FFF0D8; transform:translateY(-2px); }
+  .btn-key { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; background:#3D2B1F; color:#FFF8EE; border-radius:50%; font-size:0.65rem; font-weight:900; flex-shrink:0; }
 
   /* ── KITCHEN SCENE ── */
-  #kitchen-scene { background: #EDD0C8; }
+  #kitchen-scene {
+    background:
+      repeating-linear-gradient(transparent 0px, transparent 28px, rgba(90,40,20,0.15) 28px, rgba(90,40,20,0.15) 32px),
+      repeating-linear-gradient(90deg, rgba(90,40,20,0.08) 0px, rgba(90,40,20,0.08) 2px, transparent 2px, transparent 60px),
+      linear-gradient(180deg, #B05030 0%, #C86040 50%, #A85030 100%);
+  }
 
+  /* Order receipt bar */
   .k-order-bar {
-    background: rgba(255,245,238,0.88);
-    border-bottom: 2px solid rgba(196,140,120,0.4);
+    background: #FFF9F0;
+    border-bottom: 3px solid #3D2B1F;
     padding: 8px 18px;
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex-shrink: 0;
+    position: relative;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
   }
-  .k-order-eyebrow { font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; color: #B08070; text-transform: uppercase; white-space: nowrap; }
-  .k-pizza-name { font-size: 0.88rem; font-weight: 900; color: var(--accent); white-space: nowrap; }
-  .k-order-divider { width: 1px; height: 22px; background: rgba(196,140,120,0.4); flex-shrink: 0; }
+  .k-order-bar::after {
+    content: '';
+    position: absolute; bottom: -8px; left: 0; right: 0; height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      #FFF9F0 0px, #FFF9F0 10px,
+      transparent 10px, transparent 14px
+    );
+  }
+  .k-order-eyebrow { font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: #8A5040; text-transform: uppercase; white-space: nowrap; }
+  .k-pizza-name { font-size: 0.9rem; font-weight: 900; color: #C84A30; white-space: nowrap; }
+  .k-order-divider { width: 1px; height: 22px; background: #C89870; flex-shrink: 0; }
   .k-ticket-items { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
   .ticket-item {
     display: flex; align-items: center; gap: 4px;
-    background: rgba(255,248,244,0.9); border: 1.5px solid #DDB8AC;
+    background: #FFF3E8; border: 2px solid #3D2B1F;
     border-radius: 20px; padding: 2px 8px 2px 5px;
-    font-size: 0.7rem; font-weight: 600; color: var(--text); transition: all 0.18s;
+    font-size: 0.7rem; font-weight: 700; color: var(--text); transition: all 0.18s;
+    box-shadow: 2px 2px 0 rgba(61,43,31,0.15);
   }
-  .ticket-item.done { background: #E4F2E4; border-color: #82B882; color: #2A6A2A; }
+  .ticket-item.done { background: #D8F0D8; border-color: #2A6A2A; color: #1A5A1A; }
   .ti-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
 
   .k-body { flex: 1; display: flex; min-height: 0; overflow: hidden; }
@@ -161,43 +299,72 @@
     align-items: center; justify-content: center;
     padding: 16px 12px 16px 20px; gap: 14px;
   }
+
+  /* Pizza peel shape — elongated oval with wooden handle suggestion */
   .k-board-wrap {
     background:
-      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.03) 4px, rgba(0,0,0,0.03) 8px),
-      linear-gradient(160deg, #D4A460 0%, #A87030 100%);
-    border-radius: 20px; padding: 18px;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.18);
+      repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 1px,
+        transparent 1px, transparent 8px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px, transparent 12px,
+        rgba(0,0,0,0.06) 12px, rgba(0,0,0,0.06) 14px
+      ),
+      linear-gradient(160deg, #E8C068 0%, #C89030 45%, #A06820 100%);
+    border-radius: 50% / 30%;
+    padding: 22px 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 2px 0 rgba(255,255,255,0.2), 0 0 0 5px #8A5018;
     display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .k-board-wrap::after {
+    content: ''; position: absolute;
+    bottom: -22px; left: 50%; transform: translateX(-50%);
+    width: 28px; height: 24px;
+    background: linear-gradient(180deg, #8A5018, #5A3010);
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   }
   #pizza-canvas {
     border-radius: 50%; display: block;
-    filter: drop-shadow(0 5px 14px rgba(0,0,0,0.28));
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,0.35));
     max-width: 100%;
   }
   .k-actions { display: flex; gap: 9px; width: 100%; }
   .k-btn-clear {
-    flex: 1; padding: 11px; border: 2px solid #C8A090;
-    background: rgba(255,245,238,0.85); color: #8A6E5C;
-    font-size: 0.82rem; font-weight: 700; border-radius: 12px;
+    flex: 1; padding: 11px; border: 2.5px solid #3D2B1F;
+    background: #FFF9F0; color: #5A3C30;
+    font-size: 0.82rem; font-weight: 800; border-radius: 12px;
     cursor: pointer; font-family: inherit; transition: all 0.15s;
+    box-shadow: 3px 4px 0 rgba(61,43,31,0.2);
   }
-  .k-btn-clear:hover { border-color: var(--accent); color: var(--accent); }
+  .k-btn-clear:hover { background:#FFE8D0; transform:translateY(-1px); }
   .k-btn-serve {
-    flex: 2; padding: 11px 16px; background: var(--accent); color: #fff;
-    font-size: 0.9rem; font-weight: 800; border: none; border-radius: 12px;
+    flex: 2; padding: 11px 16px; background: #E8735A; color: #fff;
+    font-size: 0.9rem; font-weight: 900; border: 2.5px solid #3D2B1F; border-radius: 12px;
     cursor: pointer; font-family: inherit;
-    box-shadow: 0 4px 14px rgba(232,115,90,0.42); transition: all 0.15s;
+    box-shadow: 3px 4px 0 rgba(61,43,31,0.3); transition: all 0.15s;
   }
-  .k-btn-serve:hover { background: var(--accent-dk); transform: translateY(-1px); }
-  .k-btn-serve:active { transform: translateY(0); }
+  .k-btn-serve:hover { background: #C85A42; transform: translateY(-1px); }
+  .k-btn-serve:active { transform: translateY(0); box-shadow: 1px 2px 0 rgba(61,43,31,0.3); }
 
-  /* Right: ingredient shelf */
+  /* Right: ingredient shelf — warm wooden shelf look */
   .k-ingredient-station {
     flex: 1;
-    background: rgba(255,240,232,0.42);
-    border-left: 2px solid rgba(196,140,120,0.28);
-    padding: 12px 14px 12px 10px;
+    background: linear-gradient(180deg, rgba(168,90,40,0.18) 0%, rgba(210,140,80,0.25) 100%);
+    border-left: 4px solid #3D2B1F;
+    padding: 10px 12px 12px 10px;
     overflow: hidden; display: flex; flex-direction: column;
+    position: relative;
+  }
+  .k-ingredient-station::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(180deg, #C88840, #A06020);
+    border-bottom: 2px solid #3D2B1F;
   }
   .k-ingredient-grid {
     display: grid;
@@ -206,35 +373,40 @@
     overflow-y: auto;
     flex: 1;
     align-content: start;
+    margin-top: 4px;
   }
 
-  /* Ingredient cards — texture-forward, reference style */
+  /* Ingredient cards — bowl/plate style */
   .ing-card {
-    background: #FFF8F4; border: 2px solid #DDB8AC; border-radius: 10px;
+    background: linear-gradient(160deg, #FFF5EC, #F0E0CC);
+    border: 2.5px solid #3D2B1F;
+    border-radius: 12px;
     overflow: hidden; cursor: pointer;
     display: flex; flex-direction: column;
-    transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s;
+    transition: transform 0.12s, box-shadow 0.15s;
     user-select: none;
+    box-shadow: 3px 4px 0 rgba(61,43,31,0.25);
   }
-  .ing-card:hover { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(0,0,0,0.13); }
-  .ing-card:active { transform: translateY(0); }
+  .ing-card:hover { transform: translateY(-3px) scale(1.03); box-shadow: 4px 6px 0 rgba(61,43,31,0.3); }
+  .ing-card:active { transform: translateY(0) scale(1); box-shadow: 1px 2px 0 rgba(61,43,31,0.25); }
   .ing-card.selected {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(232,115,90,0.28), 0 4px 12px rgba(0,0,0,0.1);
+    border-color: #E8735A;
+    box-shadow: 3px 4px 0 rgba(232,115,90,0.5), 0 0 0 3px rgba(232,115,90,0.2);
+    background: linear-gradient(160deg, #FFF0E8, #FFE0CC);
   }
-  .ing-texture { flex: 1; min-height: 54px; position: relative; }
+  .ing-texture { flex: 1; min-height: 52px; position: relative; border-radius: 8px 8px 0 0; overflow: hidden; }
   .ing-check {
-    position: absolute; top: 4px; right: 4px; width: 17px; height: 17px;
-    background: var(--accent); border-radius: 50%;
+    position: absolute; top: 4px; right: 4px; width: 18px; height: 18px;
+    background: #E8735A; border: 2px solid #3D2B1F; border-radius: 50%;
     display: none; align-items: center; justify-content: center;
-    color: #fff; font-size: 8px; font-weight: 900;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    color: #fff; font-size: 9px; font-weight: 900;
+    box-shadow: 1px 2px 0 rgba(61,43,31,0.3);
   }
   .ing-card.selected .ing-check { display: flex; }
   .ing-label {
-    padding: 4px 3px 5px; font-size: 0.58rem; font-weight: 700;
-    text-align: center; color: #5A3C30; line-height: 1.2;
-    background: rgba(255,248,244,0.96); border-top: 1px solid #DDB8AC;
+    padding: 4px 3px 5px; font-size: 0.58rem; font-weight: 800;
+    text-align: center; color: #3D2B1F; line-height: 1.2;
+    background: rgba(255,245,235,0.98); border-top: 2px solid #3D2B1F;
   }
 
   /* Ingredient textures */
@@ -254,7 +426,30 @@
   .tex-chicken   { background:radial-gradient(ellipse 22px 14px at 30% 45%,rgba(255,255,255,0.4),transparent),radial-gradient(ellipse 18px 12px at 68% 60%,rgba(255,255,255,0.35),transparent),linear-gradient(145deg,#E8C880,#C8A048); }
   .tex-pineapple { background:repeating-linear-gradient(45deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 3px,transparent 3px,transparent 8px),repeating-linear-gradient(-45deg,rgba(0,0,0,0.1) 0,rgba(0,0,0,0.1) 3px,transparent 3px,transparent 8px),linear-gradient(145deg,#F0C020,#D8A810); }
   .tex-corn      { background:radial-gradient(circle 4px at 20% 30%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 40% 30%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 60% 30%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 20% 65%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 40% 65%,#D4A010 4px,transparent 4px),radial-gradient(circle 4px at 60% 65%,#D4A010 4px,transparent 4px),linear-gradient(145deg,#F0C820,#D8B010); }
-  .tex-eggplant  { background:radial-gradient(ellipse 18px 28px at 50% 50%,rgba(255,255,255,0.12),transparent),linear-gradient(145deg,#6A1888,#3A0850); }
+  .tex-eggplant   { background:radial-gradient(ellipse 18px 28px at 50% 50%,rgba(255,255,255,0.12),transparent),linear-gradient(145deg,#6A1888,#3A0850); }
+  .tex-dough      { background:repeating-linear-gradient(45deg,rgba(0,0,0,0.06) 0px,rgba(0,0,0,0.06) 2px,transparent 2px,transparent 8px),radial-gradient(ellipse 30px 20px at 30% 45%,rgba(255,255,255,0.3),transparent),linear-gradient(145deg,#E8C870,#C8A040); }
+  .tex-wheatdough { background:repeating-linear-gradient(30deg,rgba(0,0,0,0.1) 0px,rgba(0,0,0,0.1) 2px,transparent 2px,transparent 7px),repeating-linear-gradient(-30deg,rgba(0,0,0,0.07) 0px,rgba(0,0,0,0.07) 2px,transparent 2px,transparent 7px),linear-gradient(145deg,#A87830,#7A5018); }
+  .tex-pesto      { background:radial-gradient(circle at 22% 40%,rgba(255,255,255,0.18) 14px,transparent 14px),radial-gradient(circle at 72% 62%,rgba(255,255,255,0.12) 10px,transparent 10px),linear-gradient(145deg,#3A8018,#206008); }
+  .tex-garlic     { background:radial-gradient(ellipse 24px 16px at 28% 40%,rgba(255,255,255,0.55),transparent),radial-gradient(ellipse 18px 12px at 70% 65%,rgba(255,255,255,0.45),transparent),radial-gradient(ellipse 14px 10px at 50% 30%,rgba(200,180,100,0.3),transparent),linear-gradient(145deg,#F0ECD0,#D8D0A0); }
+  .tex-slicedtomato { background:radial-gradient(circle 10px at 28% 38%,rgba(255,255,255,0.25) 40%,transparent 40%),radial-gradient(circle 10px at 68% 62%,rgba(255,255,255,0.25) 40%,transparent 40%),radial-gradient(circle 10px at 48% 55%,rgba(255,255,255,0.2) 40%,transparent 40%),linear-gradient(145deg,#E03828,#B82010); }
+  .tex-jalapeno   { background:repeating-linear-gradient(-55deg,rgba(255,255,255,0.14) 0px,rgba(255,255,255,0.14) 3px,transparent 3px,transparent 10px),linear-gradient(145deg,#58C020,#308010); }
+  .tex-figs       { background:radial-gradient(circle 7px at 30% 40%,rgba(255,180,120,0.45) 40%,transparent 40%),radial-gradient(circle 7px at 68% 60%,rgba(255,180,120,0.4) 40%,transparent 40%),radial-gradient(circle 5px at 50% 28%,rgba(255,180,120,0.35) 40%,transparent 40%),linear-gradient(145deg,#7A2060,#501440); }
+  .tex-zucchini   { background:repeating-linear-gradient(0deg,rgba(255,255,255,0.14) 0px,rgba(255,255,255,0.14) 4px,rgba(0,0,0,0.06) 4px,rgba(0,0,0,0.06) 8px,transparent 8px,transparent 16px),linear-gradient(145deg,#50A030,#2A6818); }
+  .tex-artichoke  { background:repeating-linear-gradient(20deg,rgba(0,0,0,0.1) 0px,rgba(0,0,0,0.1) 3px,transparent 3px,transparent 9px),repeating-linear-gradient(-20deg,rgba(255,255,255,0.1) 0px,rgba(255,255,255,0.1) 3px,transparent 3px,transparent 9px),linear-gradient(145deg,#7A9868,#506848); }
+  /* Pizza Pass */
+  .tex-truffle    { background:radial-gradient(circle 10px at 28% 42%,#1A0C08 40%,transparent 40%),radial-gradient(circle 8px at 65% 58%,#1A0C08 40%,transparent 40%),radial-gradient(circle 6px at 45% 25%,#1A0C08 40%,transparent 40%),linear-gradient(145deg,#2A1808,#180C04); }
+  .tex-avocado    { background:radial-gradient(ellipse 22px 18px at 50% 48%,#D4B860 40%,#A87830 60%,transparent 60%),linear-gradient(145deg,#3A7018,#206010); }
+  .tex-duck       { background:radial-gradient(ellipse 22px 14px at 30% 45%,rgba(255,255,255,0.3),transparent),radial-gradient(ellipse 18px 12px at 68% 60%,rgba(255,255,255,0.25),transparent),linear-gradient(145deg,#8A4020,#5A2810); }
+  .tex-peach      { background:radial-gradient(ellipse 26px 20px at 35% 40%,rgba(255,255,255,0.4),transparent),radial-gradient(ellipse 20px 16px at 65% 65%,rgba(255,255,255,0.3),transparent),linear-gradient(145deg,#F09040,#E06820); }
+  .tex-apple      { background:radial-gradient(ellipse 20px 14px at 28% 35%,rgba(255,255,255,0.35),transparent),radial-gradient(ellipse 14px 10px at 68% 65%,rgba(255,255,255,0.25),transparent),linear-gradient(145deg,#D82020,#A01010); }
+  .tex-scallop    { background:repeating-linear-gradient(0deg,rgba(0,0,0,0.06) 0px,rgba(0,0,0,0.06) 2px,transparent 2px,transparent 10px),radial-gradient(ellipse 24px 18px at 32% 45%,rgba(255,255,255,0.5),transparent),linear-gradient(145deg,#F0EAD0,#D8C8A0); }
+  /* Limited Time */
+  .tex-chilibean  { background:radial-gradient(circle at 25% 40%,rgba(255,255,255,0.1) 16px,transparent 16px),radial-gradient(circle at 70% 60%,rgba(255,255,255,0.08) 12px,transparent 12px),linear-gradient(145deg,#A82010,#701408); }
+  .tex-porkbelly  { background:repeating-linear-gradient(0deg,#E8C890 0,#E8C890 5px,#D08840 5px,#D08840 9px,#B86828 9px,#B86828 13px,#E8C890 13px,#E8C890 18px); }
+  .tex-potato     { background:radial-gradient(ellipse 22px 16px at 30% 45%,rgba(255,255,255,0.3),transparent),radial-gradient(ellipse 18px 12px at 68% 60%,rgba(255,255,255,0.25),transparent),radial-gradient(circle 4px at 55% 30%,rgba(0,0,0,0.2) 40%,transparent 40%),linear-gradient(145deg,#D4B070,#A88040); }
+  .tex-tofu       { background:radial-gradient(ellipse 24px 18px at 30% 40%,rgba(255,255,255,0.6),transparent),radial-gradient(ellipse 18px 14px at 68% 65%,rgba(255,255,255,0.5),transparent),linear-gradient(145deg,#F8F4E0,#E8E0C0); }
+  .tex-pumpkin    { background:repeating-linear-gradient(30deg,rgba(0,0,0,0.1) 0px,rgba(0,0,0,0.1) 2px,transparent 2px,transparent 12px),radial-gradient(ellipse 26px 20px at 35% 40%,rgba(255,255,255,0.25),transparent),linear-gradient(145deg,#E87020,#C84E10); }
+  .tex-rosepetal  { background:radial-gradient(ellipse 24px 16px at 30% 45%,rgba(255,255,255,0.4),transparent),radial-gradient(ellipse 20px 14px at 68% 60%,rgba(255,255,255,0.35),transparent),linear-gradient(145deg,#E8607A,#C83858); }
 
   /* ── FEEDBACK ── */
   .feedback-overlay { position:fixed; inset:0; background:rgba(61,43,31,0.65); display:flex; align-items:center; justify-content:center; z-index:200; backdrop-filter:blur(4px); }
@@ -269,6 +464,88 @@
   .fb-detail { font-size:0.75rem; color:var(--text-soft); margin-bottom:18px; line-height:1.6; }
   .btn-next { width:100%; padding:13px; background:var(--accent); color:#fff; font-size:0.92rem; font-weight:800; border:none; border-radius:14px; cursor:pointer; font-family:inherit; box-shadow:0 4px 14px rgba(232,115,90,0.4); transition:all 0.15s; }
   .btn-next:hover { background:var(--accent-dk); transform:translateY(-1px); }
+  .btn-shop-fb { width:100%; padding:11px; background:#FFF0E0; border:2px solid #DDB8AC; color:var(--text); font-size:0.88rem; font-weight:800; border-radius:14px; cursor:pointer; font-family:inherit; margin-bottom:8px; transition:all 0.14s; }
+  .btn-shop-fb:hover { border-color:var(--accent); color:var(--accent); }
+  .ticket-item.locked { opacity:0.55; border-style:dashed; }
+
+  /* ── SHOP ── */
+  .shop-overlay { position:fixed; inset:0; background:rgba(61,43,31,0.72); display:flex; align-items:center; justify-content:center; z-index:300; backdrop-filter:blur(4px); }
+  .shop-overlay.hidden { display:none; }
+  .shop-card { background:var(--cream); border-radius:24px; padding:24px 24px 20px; max-width:400px; width:94%; max-height:88vh; display:flex; flex-direction:column; box-shadow:0 24px 60px rgba(0,0,0,0.35); animation:popIn 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+  .shop-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-shrink:0; }
+  .shop-title { font-size:1.15rem; font-weight:900; color:var(--text); }
+  .shop-wallet { font-size:0.98rem; font-weight:800; color:var(--accent); }
+  .shop-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; overflow-y:auto; flex:1; }
+  .shop-item { background:#FFF8F4; border:2px solid #DDB8AC; border-radius:11px; overflow:hidden; display:flex; flex-direction:column; }
+  .shop-item.owned { border-color:#82B882; background:#F2FAF2; }
+  .shop-tex { height:52px; flex-shrink:0; }
+  .shop-name { font-size:0.62rem; font-weight:700; color:var(--text); text-align:center; padding:4px 3px 1px; line-height:1.2; }
+  .shop-type-tag { font-size:0.52rem; font-weight:700; color:var(--text-soft); text-align:center; padding:0 3px 2px; opacity:0.7; }
+  .shop-section-header { grid-column:1/-1; font-size:0.6rem; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; padding:8px 2px 4px; margin-top:4px; border-top:1px solid rgba(196,140,120,0.25); }
+  .shop-section-header.ch  { color:var(--text-soft); }
+  .shop-section-header.pass { color:#9050D0; }
+  .shop-section-header.temp { color:#D06020; }
+  .shop-section-header.upg  { color:#5080C0; }
+  .shop-item.pass-locked { border-color:#C090E0; background:rgba(140,60,200,0.06); }
+  .shop-item.temp-locked { border-color:#E09060; background:rgba(210,100,30,0.06); }
+  .btn-buy { margin:3px 6px 8px; padding:5px 0; border:none; border-radius:8px; font-family:inherit; font-size:0.68rem; font-weight:800; cursor:pointer; transition:all 0.12s; width:calc(100% - 12px); }
+  .btn-buy.can { background:var(--accent); color:#fff; }
+  .btn-buy.can:hover { background:var(--accent-dk); }
+  .btn-buy.cant { background:#E8DDD6; color:#B09080; cursor:not-allowed; }
+  .btn-buy.got { background:#C8E8C8; color:#2A6A2A; cursor:default; }
+  .btn-close-shop { margin-top:14px; width:100%; padding:12px; background:#FFF0E0; border:2px solid #DDB8AC; color:var(--text); font-size:0.88rem; font-weight:800; border-radius:12px; cursor:pointer; font-family:inherit; transition:all 0.14s; flex-shrink:0; }
+  .btn-close-shop:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* ── UPGRADES in shop ── */
+  .upgrade-card { grid-column:1/-1; display:flex; align-items:center; gap:10px; background:#FFF8F4; border:2px solid #DDB8AC; border-radius:11px; padding:10px 12px; }
+  .upgrade-card.owned-up { border-color:#82B882; background:#F2FAF2; }
+  .upgrade-card.locked-up { opacity:0.5; }
+  .upg-icon { font-size:1.5rem; flex-shrink:0; }
+  .upg-info { flex:1; }
+  .upg-name { font-size:0.8rem; font-weight:800; color:var(--text); }
+  .upg-desc { font-size:0.65rem; color:var(--text-soft); margin-top:1px; }
+  .btn-buy-upg { padding:6px 14px; border:none; border-radius:8px; font-family:inherit; font-size:0.72rem; font-weight:800; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+  .btn-buy-upg.can { background:var(--accent); color:#fff; }
+  .btn-buy-upg.cant { background:#E8DDD6; color:#B09080; cursor:not-allowed; }
+  .btn-buy-upg.got { background:#C8E8C8; color:#2A6A2A; cursor:default; }
+  .btn-buy-upg.locked-ch { background:#E8DDD6; color:#B09080; cursor:not-allowed; }
+
+  /* ── WIDE COUNTER ── */
+  .k-ingredient-grid.wide { grid-template-columns: repeat(5, 1fr); }
+
+  /* ── ZAZOOM POSTER ── */
+  .cs-zazoom-poster { position:absolute; top:8px; left:14px; width:56px; height:70px; background:linear-gradient(145deg,#F0E8D0,#E0D0A8); border:3px solid #C8A858; border-radius:4px; display:none; align-items:center; justify-content:center; flex-direction:column; font-size:0.5rem; font-weight:900; color:#8A6020; text-align:center; line-height:1.3; box-shadow:0 3px 10px rgba(0,0,0,0.2); }
+  .cs-zazoom-poster.visible { display:flex; }
+  .cs-zazoom-poster::before { content:'🍕'; font-size:1.2rem; margin-bottom:2px; }
+
+  /* ── PIZZARIA PROTECTOR ── */
+  .protector-overlay { position:fixed; inset:0; background:rgba(18,6,6,0.97); z-index:700; display:flex; flex-direction:column; }
+  .protector-overlay.hidden { display:none; }
+  .p-hdr { padding:12px 18px; display:flex; align-items:center; gap:12px; background:rgba(0,0,0,0.5); flex-shrink:0; border-bottom:2px solid rgba(255,60,30,0.3); }
+  .p-hdr-info { flex:1; }
+  .p-title { font-size:1.0rem; font-weight:900; color:#fff; }
+  .p-subtitle { font-size:0.68rem; color:rgba(255,180,120,0.8); margin-top:2px; }
+  .p-timer-box { text-align:center; }
+  .p-timer-num { font-size:1.8rem; font-weight:900; color:#FFD060; line-height:1; }
+  .p-timer-label { font-size:0.55rem; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:1px; }
+  .p-arena { flex:1; position:relative; overflow:hidden; background:linear-gradient(180deg,#1A0606 0%,#300C0C 60%,#481414 100%); }
+  .p-restaurant { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:3.8rem; z-index:3; filter:drop-shadow(0 4px 16px rgba(0,0,0,0.6)); }
+  .p-ground-line { position:absolute; bottom:28%; left:0; right:0; height:2px; background:rgba(255,80,40,0.25); }
+  .p-enemy { position:absolute; font-size:2rem; cursor:pointer; user-select:none; z-index:2; transition:filter 0.1s; }
+  .p-enemy:active { filter:brightness(3); }
+  .p-hp-wrap { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); width:78%; }
+  .p-hp-label { font-size:0.58rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px; }
+  .p-hp-bar { height:10px; background:rgba(0,0,0,0.5); border-radius:5px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); }
+  .p-hp-fill { height:100%; background:linear-gradient(90deg,#E84040,#F07040); border-radius:5px; transition:width 0.35s; }
+  .p-hit-text { position:absolute; font-size:1.2rem; font-weight:900; color:#FFD060; pointer-events:none; animation:dmgFloat 0.9s ease forwards; }
+  @keyframes dmgFloat { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-50px)} }
+  .p-result-panel { position:absolute; inset:0; background:rgba(8,0,0,0.9); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; backdrop-filter:blur(6px); }
+  .p-result-panel.hidden { display:none; }
+  .p-res-icon { font-size:3.5rem; margin-bottom:10px; }
+  .p-res-title { font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:6px; }
+  .p-res-sub { font-size:0.82rem; color:rgba(255,255,255,0.5); margin-bottom:12px; }
+  .p-res-money { font-size:1.2rem; font-weight:900; margin-bottom:22px; }
+  .btn-p-done { padding:12px 36px; background:var(--accent); color:#fff; border:none; border-radius:20px; font-family:inherit; font-size:0.9rem; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(232,115,90,0.4); }
 </style>
 
 <!-- HUD -->
@@ -292,43 +569,68 @@
     <div class="cs-wall">
       <div class="cs-frame f1"></div>
       <div class="cs-frame f2"></div>
+      <div class="cs-zazoom-poster" id="zazoom-poster">ZaZoom</div>
     </div>
     <div class="cs-floor"></div>
-    <div class="cs-table t1"></div>
-    <div class="cs-table t2"></div>
-    <div class="cs-chair c1"></div><div class="cs-chair c2"></div>
-    <div class="cs-chair c3"></div><div class="cs-chair c4"></div>
+    <div class="cs-oven">
+      <div class="cs-oven-chimney"></div>
+      <div class="cs-oven-arch-label">Wood Fire</div>
+    </div>
+    <div class="cs-lamp">
+      <div class="cs-lamp-cord"></div>
+      <div class="cs-lamp-shade"></div>
+    </div>
     <div class="cs-counter">
       <div class="cs-register"></div>
       <div class="cs-counter-pizza">🍕</div>
       <div class="cs-jar"></div>
     </div>
     <div class="cs-worker">
-      <svg viewBox="0 0 100 170" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="78" cy="82" rx="8" ry="24" fill="#C06828"/>
-        <rect x="22" y="92" width="56" height="65" rx="10" fill="#7AAF50"/>
-        <rect x="33" y="98" width="34" height="54" rx="5" fill="#F5ECE0"/>
-        <rect x="26" y="98" width="9" height="6" rx="3" fill="#F5ECE0"/>
-        <rect x="65" y="98" width="9" height="6" rx="3" fill="#F5ECE0"/>
-        <rect x="42" y="86" width="16" height="12" rx="3" fill="#F4C896"/>
-        <ellipse cx="50" cy="66" rx="28" ry="30" fill="#F4C896"/>
-        <ellipse cx="50" cy="44" rx="29" ry="20" fill="#C06828"/>
-        <ellipse cx="26" cy="68" rx="10" ry="18" fill="#C06828"/>
-        <ellipse cx="74" cy="68" rx="10" ry="18" fill="#C06828"/>
-        <ellipse cx="41" cy="66" rx="4" ry="4.5" fill="#3D2B1F"/>
-        <ellipse cx="59" cy="66" rx="4" ry="4.5" fill="#3D2B1F"/>
-        <circle cx="42.5" cy="64.5" r="1.3" fill="white"/>
-        <circle cx="60.5" cy="64.5" r="1.3" fill="white"/>
-        <path d="M 37 59 Q 41 56 45 58" stroke="#8A3820" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <path d="M 55 58 Q 59 56 63 59" stroke="#8A3820" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <ellipse cx="50" cy="72" rx="2.5" ry="1.5" fill="#E0A870"/>
-        <ellipse cx="35" cy="73" rx="7" ry="4.5" fill="#F0A088" opacity="0.5"/>
-        <ellipse cx="65" cy="73" rx="7" ry="4.5" fill="#F0A088" opacity="0.5"/>
-        <path d="M 43 80 Q 50 88 57 80" stroke="#C06828" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        <rect x="2" y="95" width="23" height="13" rx="6" fill="#7AAF50"/>
-        <ellipse cx="5" cy="101" rx="5" ry="6.5" fill="#F4C896"/>
-        <rect x="75" y="95" width="23" height="13" rx="6" fill="#7AAF50"/>
-        <ellipse cx="95" cy="101" rx="5" ry="6.5" fill="#F4C896"/>
+      <svg viewBox="0 0 100 190" xmlns="http://www.w3.org/2000/svg">
+        <!-- Chef toque hat -->
+        <ellipse cx="50" cy="52" rx="28" ry="8" fill="#E8E0D0"/>
+        <rect x="24" y="16" width="52" height="38" rx="14" fill="#F8F4EE"/>
+        <ellipse cx="50" cy="16" rx="26" ry="12" fill="#FFFFF8"/>
+        <!-- Hat band -->
+        <rect x="22" y="48" width="56" height="10" rx="4" fill="#E0D8C8"/>
+        <!-- Neck / collar area -->
+        <rect x="38" y="90" width="24" height="14" rx="4" fill="#F4C896"/>
+        <!-- Chef jacket body — white -->
+        <rect x="16" y="98" width="68" height="72" rx="10" fill="#F5F0E8"/>
+        <!-- Jacket lapels / double-breasted details -->
+        <rect x="38" y="104" width="24" height="62" rx="4" fill="#EDE8E0"/>
+        <circle cx="44" cy="112" r="3" fill="#D8C8A8"/>
+        <circle cx="44" cy="122" r="3" fill="#D8C8A8"/>
+        <circle cx="44" cy="132" r="3" fill="#D8C8A8"/>
+        <!-- Arms — white sleeves -->
+        <rect x="0" y="100" width="20" height="52" rx="8" fill="#F5F0E8"/>
+        <rect x="80" y="100" width="20" height="52" rx="8" fill="#F5F0E8"/>
+        <!-- Blue oven gloves -->
+        <ellipse cx="10" cy="155" rx="11" ry="8" fill="#4A78C8"/>
+        <ellipse cx="90" cy="155" rx="11" ry="8" fill="#4A78C8"/>
+        <!-- Glove details -->
+        <ellipse cx="10" cy="155" rx="7" ry="5" fill="#3A60B0" opacity="0.5"/>
+        <ellipse cx="90" cy="155" rx="7" ry="5" fill="#3A60B0" opacity="0.5"/>
+        <!-- Face / head -->
+        <ellipse cx="50" cy="76" rx="26" ry="24" fill="#F4C896"/>
+        <!-- Rosy cheeks -->
+        <ellipse cx="32" cy="80" rx="8" ry="5" fill="#F0A088" opacity="0.45"/>
+        <ellipse cx="68" cy="80" rx="8" ry="5" fill="#F0A088" opacity="0.45"/>
+        <!-- Eyes -->
+        <ellipse cx="40" cy="72" rx="4" ry="4.5" fill="#3D2B1F"/>
+        <ellipse cx="60" cy="72" rx="4" ry="4.5" fill="#3D2B1F"/>
+        <circle cx="41.5" cy="70.5" r="1.5" fill="white"/>
+        <circle cx="61.5" cy="70.5" r="1.5" fill="white"/>
+        <!-- Eyebrows -->
+        <path d="M 35 64 Q 40 61 45 63" stroke="#5A3020" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M 55 63 Q 60 61 65 64" stroke="#5A3020" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <!-- Nose -->
+        <ellipse cx="50" cy="79" rx="3" ry="2" fill="#E0A070"/>
+        <!-- Big friendly mustache -->
+        <path d="M 34 85 Q 42 92 50 88 Q 58 92 66 85" stroke="#5A2A10" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M 36 85 Q 42 89 50 87 Q 58 89 64 85" fill="#5A2A10"/>
+        <!-- Smile -->
+        <path d="M 42 93 Q 50 100 58 93" stroke="#C06828" stroke-width="2" fill="none" stroke-linecap="round"/>
       </svg>
     </div>
     <div class="cs-customer" id="cs-customer"></div>
@@ -345,6 +647,7 @@
       <div class="response-btns">
         <button class="btn-okay" onclick="goToKitchen()"><span class="btn-key">A</span> Okay</button>
         <button class="btn-what" onclick="showHint()"><span class="btn-key">B</span> What?</button>
+        <button class="btn-what" onclick="showShop()" style="flex:0.85"><span class="btn-key">S</span> 🛒</button>
       </div>
     </div>
   </div>
@@ -378,25 +681,93 @@
   <div class="feedback-card" id="feedback-card"></div>
 </div>
 
+<div class="protector-overlay hidden" id="protector-overlay">
+  <div class="p-hdr">
+    <div class="p-hdr-info">
+      <div class="p-title">🍕 Pizzaria Protector</div>
+      <div class="p-subtitle">Tap the Deep Dish Gang before they reach your restaurant!</div>
+    </div>
+    <div class="p-timer-box">
+      <div class="p-timer-num" id="p-timer">15</div>
+      <div class="p-timer-label">seconds</div>
+    </div>
+  </div>
+  <div class="p-arena" id="p-arena">
+    <div class="p-restaurant">🏠</div>
+    <div class="p-ground-line"></div>
+    <div class="p-hp-wrap">
+      <div class="p-hp-label">Restaurant HP</div>
+      <div class="p-hp-bar"><div class="p-hp-fill" id="p-hp-fill"></div></div>
+    </div>
+    <div class="p-result-panel hidden" id="p-result">
+      <div class="p-res-icon" id="p-res-icon"></div>
+      <div class="p-res-title" id="p-res-title"></div>
+      <div class="p-res-sub" id="p-res-sub"></div>
+      <div class="p-res-money" id="p-res-money"></div>
+      <button class="btn-p-done" onclick="closeProtector()">Back to Kitchen →</button>
+    </div>
+  </div>
+</div>
+
+<div class="shop-overlay hidden" id="shop-overlay">
+  <div class="shop-card">
+    <div class="shop-header">
+      <span class="shop-title">🛒 Shop</span>
+      <span class="shop-wallet">💵 $<span id="shop-balance">0.00</span></span>
+    </div>
+    <div class="shop-grid" id="shop-grid"></div>
+    <button class="btn-close-shop" onclick="closeShop()">Close Shop</button>
+  </div>
+</div>
+
 <script>
 const INGREDIENTS = [
-  { id:'sauce',     name:'Tomato Sauce', tex:'tex-sauce',     dot:'#C0392B' },
-  { id:'cheese',    name:'Mozzarella',   tex:'tex-cheese',    dot:'#F0D060' },
-  { id:'pepperoni', name:'Pepperoni',    tex:'tex-pepperoni', dot:'#9B2335' },
-  { id:'sausage',   name:'Sausage',      tex:'tex-sausage',   dot:'#7A3018' },
-  { id:'mushroom',  name:'Mushrooms',    tex:'tex-mushroom',  dot:'#9E7A55' },
-  { id:'olive',     name:'Black Olives', tex:'tex-olive',     dot:'#302818' },
-  { id:'pepper',    name:'Bell Pepper',  tex:'tex-pepper',    dot:'#27AE60' },
-  { id:'onion',     name:'Red Onion',    tex:'tex-onion',     dot:'#8B44B0' },
-  { id:'basil',     name:'Fresh Basil',  tex:'tex-basil',     dot:'#1E8449' },
-  { id:'pineapple', name:'Pineapple',    tex:'tex-pineapple', dot:'#F0C020' },
-  { id:'corn',      name:'Corn',         tex:'tex-corn',      dot:'#E0B810' },
-  { id:'bacon',     name:'Bacon',        tex:'tex-bacon',     dot:'#D84848' },
-  { id:'ham',       name:'Ham',          tex:'tex-ham',       dot:'#F08880' },
-  { id:'anchovy',   name:'Anchovy',      tex:'tex-anchovy',   dot:'#3A1810' },
-  { id:'shrimp',    name:'Shrimp',       tex:'tex-shrimp',    dot:'#E87070' },
-  { id:'chicken',   name:'Chicken',      tex:'tex-chicken',   dot:'#E8C880' },
-  { id:'eggplant',  name:'Eggplant',     tex:'tex-eggplant',  dot:'#5A1880' },
+  // ── Chapter 1 · Free ──
+  { id:'dough',       name:'Dough',         tex:'tex-dough',       dot:'#D4A850', ch:1, cashCost:0,   type:'Dough',     isBase:true },
+  { id:'sauce',       name:'Tomato Sauce',  tex:'tex-sauce',       dot:'#C0392B', ch:1, cashCost:0,   type:'Sauce' },
+  { id:'cheese',      name:'Cheese',        tex:'tex-cheese',      dot:'#F0D060', ch:1, cashCost:0,   type:'Cheese' },
+  { id:'pepperoni',   name:'Pepperoni',     tex:'tex-pepperoni',   dot:'#9B2335', ch:1, cashCost:0,   type:'Meat' },
+  { id:'eggplant',    name:'Eggplant',      tex:'tex-eggplant',    dot:'#5A1880', ch:1, cashCost:0,   type:'Fruit' },
+  // ── Chapter 1 · Unlockable ──
+  { id:'sausage',     name:'Sausage',       tex:'tex-sausage',     dot:'#7A3018', ch:1, cashCost:20,  type:'Meat' },
+  { id:'mushroom',    name:'Mushroom',      tex:'tex-mushroom',    dot:'#9E7A55', ch:1, cashCost:35,  type:'Fungus' },
+  { id:'olive',       name:'Olive',         tex:'tex-olive',       dot:'#302818', ch:1, cashCost:50,  type:'Fruit' },
+  { id:'onion',       name:'Onion',         tex:'tex-onion',       dot:'#8B44B0', ch:1, cashCost:70,  type:'Vegetable' },
+  { id:'pepper',      name:'Bell Pepper',   tex:'tex-pepper',      dot:'#27AE60', ch:1, cashCost:100, type:'Fruit' },
+  // ── Chapter 2 ──
+  { id:'wheatdough',  name:'Wheat Dough',   tex:'tex-wheatdough',  dot:'#8A6020', ch:2, cashCost:115, type:'Dough',  isBase:true },
+  { id:'pesto',       name:'Pesto Sauce',   tex:'tex-pesto',       dot:'#2A7010', ch:2, cashCost:100, type:'Sauce' },
+  { id:'bacon',       name:'Bacon',         tex:'tex-bacon',       dot:'#D84848', ch:2, cashCost:115, type:'Meat' },
+  { id:'pineapple',   name:'Pineapple',     tex:'tex-pineapple',   dot:'#F0C020', ch:2, cashCost:115, type:'Fruit' },
+  { id:'anchovy',     name:'Anchovy',       tex:'tex-anchovy',     dot:'#3A1810', ch:2, cashCost:125, type:'Meat' },
+  { id:'ham',         name:'Ham',           tex:'tex-ham',         dot:'#F08880', ch:2, cashCost:125, type:'Meat' },
+  { id:'basil',       name:'Basil',         tex:'tex-basil',       dot:'#1E8449', ch:2, cashCost:125, type:'Vegetable' },
+  // ── Chapter 3 ──
+  { id:'shrimp',      name:'Shrimp',        tex:'tex-shrimp',      dot:'#E87070', ch:3, cashCost:150, type:'Meat' },
+  { id:'corn',        name:'Corn',          tex:'tex-corn',        dot:'#E0B810', ch:3, cashCost:150, type:'Vegetable' },
+  { id:'chicken',     name:'Chicken',       tex:'tex-chicken',     dot:'#E8C880', ch:3, cashCost:150, type:'Meat' },
+  // ── Chapter 4 ──
+  { id:'garlic',      name:'Garlic',        tex:'tex-garlic',      dot:'#D8D0A0', ch:4, cashCost:200, type:'Vegetable' },
+  { id:'slicedtomato',name:'Sliced Tomato', tex:'tex-slicedtomato',dot:'#E03020', ch:4, cashCost:200, type:'Fruit' },
+  { id:'jalapeno',    name:'Jalapeño',      tex:'tex-jalapeno',    dot:'#3ABF20', ch:4, cashCost:200, type:'Fruit' },
+  // ── Chapter 5 · Free Licenses ──
+  { id:'figs',        name:'Figs',          tex:'tex-figs',        dot:'#7A2858', ch:5, cashCost:0,   type:'Fruit' },
+  { id:'zucchini',    name:'Zucchini',      tex:'tex-zucchini',    dot:'#4A9A30', ch:5, cashCost:0,   type:'Fruit' },
+  { id:'artichoke',   name:'Artichoke',     tex:'tex-artichoke',   dot:'#5A9868', ch:5, cashCost:0,   type:'Vegetable' },
+  // ── Pizza Pass ──
+  { id:'truffle',     name:'Truffle',       tex:'tex-truffle',     dot:'#2A1808', ch:'pass', type:'Fungus',    pass:'S1 Free · S2–3: 450 Tokens' },
+  { id:'avocado',     name:'Avocado',       tex:'tex-avocado',     dot:'#3A7018', ch:'pass', type:'Fruit',     pass:'Bonfyre Fest · 42 Stars' },
+  { id:'duck',        name:'Duck',          tex:'tex-duck',        dot:'#8A4020', ch:'pass', type:'Meat',      pass:'S2 Free · S3: 450 Tokens' },
+  { id:'peach',       name:'Peach',         tex:'tex-peach',       dot:'#F09040', ch:'pass', type:'Fruit',     pass:'S3 Free' },
+  { id:'apple',       name:'Apple',         tex:'tex-apple',       dot:'#D82020', ch:'pass', type:'Fruit',     pass:'S4 Free' },
+  { id:'scallop',     name:'Scallop',       tex:'tex-scallop',     dot:'#F0EAD0', ch:'pass', type:'Meat',      pass:'S5 Free' },
+  // ── Limited Time ──
+  { id:'chilibean',   name:'Chili Bean Sauce', tex:'tex-chilibean', dot:'#A82010', ch:'temp', type:'Sauce',     event:'Grand Pi' },
+  { id:'porkbelly',   name:'Pork Belly',    tex:'tex-porkbelly',   dot:'#D08840', ch:'temp', type:'Meat',      event:'Grand Pi' },
+  { id:'potato',      name:'Potato',        tex:'tex-potato',      dot:'#D4B070', ch:'temp', type:'Vegetable', event:'Grand Pi' },
+  { id:'tofu',        name:'Tofu',          tex:'tex-tofu',        dot:'#F8F4E0', ch:'temp', type:'Other',     event:'Grand Pi' },
+  { id:'pumpkin',     name:'Pumpkin',       tex:'tex-pumpkin',     dot:'#E87020', ch:'temp', type:'Fruit',     event:'Pumpkin Palooza' },
+  { id:'rosepetal',   name:'Rose Petal',    tex:'tex-rosepetal',   dot:'#E8607A', ch:'temp', type:'Vegetable', event:"Valentine's Day" },
 ];
 
 function svgMan(hair, shirt, skin='#F4C896', extras='') {
@@ -499,9 +870,82 @@ const CUSTOMERS = [
   { name:'Marco', isKid:false, dialogue:"Breakfast pizza! Sausage, mushroom, onion, bacon, ham — the whole brunch situation.", order:{pizzaName:'Breakfast Pizza',toppings:['sauce','cheese','sausage','mushroom','onion','bacon','ham']}, money:12.00, get svg(){return svgMan('#3A2010','#8B5030','#F4C896',beanie('#3A3430')+beard('#4A2810'));} },
   { name:'Lily', isKid:true, dialogue:"FRUITY PIG!! Pepperoni, sausage, olive, bell pepper, bacon, pineapple and ham!! Dad said I could pick!!", order:{pizzaName:'Fruity Pig',toppings:['sauce','cheese','pepperoni','sausage','olive','pepper','bacon','pineapple','ham']}, money:14.00, get svg(){return svgKid('#5A3010','#E860A0','#F8D0A0',pigtails('#5A3010'));} },
   { name:'Bruno', isKid:false, dialogue:"All-Dressed. Sauce, cheese, pepperoni, sausage, mushroom, olive, onion, bell pepper, bacon, pineapple, anchovy, ham, basil, shrimp, corn, chicken. ALL SIXTEEN. Read it back.", order:{pizzaName:'All-Dressed Pizza',toppings:['sauce','cheese','pepperoni','sausage','mushroom','olive','onion','pepper','bacon','pineapple','anchovy','ham','basil','shrimp','corn','chicken']}, money:22.00, get svg(){return svgMan('#2A1A10','#4A7840','#D0956A');} },
+
+  // ── Chapter 3: PizzaCon ──────────────────────────────────────────────────
+  // Day 32 – Opening Ceremony Day
+  { name:'Lorenzo', isKid:false, dialogue:"First pizza of PizzaCon! A momentous occasion! I'll take something classic — this is not a day for experimentation, it's a day for CELEBRATION!", order:{pizzaName:'The Classic Opener',toppings:['sauce','cheese','pepperoni']}, money:14.00, get svg(){return svgMan('#C87820','#E04020');} },
+  { name:'OrderUp Rep', isKid:false, dialogue:"I'll take a pizza — the algorithm says: standard cheese baseline with protein augmentation. So... pepperoni and sausage. Our algorithm agrees.", order:{pizzaName:'Algorithm Special',toppings:['sauce','cheese','pepperoni','sausage']}, money:16.00, get svg(){return svgMan('#1A1A2A','#1060C0','#D0B090');} },
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"Ooh, I'm doing a segment on convention food! Give me something with personality. Mushrooms and olives — very photogenic.", order:{pizzaName:'The ZaZoom Feature',toppings:['sauce','cheese','mushroom','olive']}, money:15.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
+  { name:'Plant Lady', isKid:false, dialogue:"I dragged my whole book club here! They cried at the pizza fountain. Pesto, cheese, basil, eggplant — this is a magical place.", order:{pizzaName:'Book Club Bliss',toppings:['pesto','cheese','basil','eggplant']}, money:17.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+
+  // Day 33 – Algorithms vs. Instinct
+  { name:'Dr. Michael Keh', isKid:false, dialogue:"I am evaluating every kitchen at this convention. I will have a Margherita. Simple is the ultimate test of technique.", order:{pizzaName:'The Benchmark',toppings:['sauce','cheese','basil']}, money:18.00, get svg(){return svgMan('#1A1818','#2A3A6A','#E0B890',glasses);} },
+  { name:'Veggie Man', isKid:false, dialogue:"I don't trust a convention that has a meat sculpture in the lobby. Pesto, cheese, pepper, onion, mushroom — my principled plate.", order:{pizzaName:'The Principled Plate',toppings:['pesto','cheese','pepper','onion','mushroom']}, money:15.00, get svg(){return svgMan('#3A5A20','#4A8030','#D0B880');} },
+  { name:'OrderUp Rep', isKid:false, dialogue:"Our engine recommends a Hawaiian build today. I personally find pineapple controversial but the numbers are the numbers.", order:{pizzaName:'Data-Driven Hawaiian',toppings:['sauce','cheese','ham','pineapple']}, money:14.00, get svg(){return svgMan('#1A1A2A','#1060C0','#D0B090');} },
+  { name:'Lorenzo', isKid:false, dialogue:"Day TWO! Still extremely exciting! Anchovy today — polarizing ingredients are what make pizza GREAT!", order:{pizzaName:'The Bold Lorenzo',toppings:['sauce','cheese','anchovy','olive']}, money:16.00, get svg(){return svgMan('#C87820','#E04020');} },
+
+  // Day 34 – Seafood Showcase
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"I need to try the shrimp pizza ON CAMERA for the Seafood Showcase segment. Make it beautiful — I have 800k followers watching.", order:{pizzaName:'The ZaZoom Seafood Special',toppings:['sauce','cheese','shrimp','basil']}, money:20.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
+  { name:'Plant Lady', isKid:false, dialogue:"Shrimp! I've never had shrimp on pizza before. Is it wonderful? Tell me it's wonderful. This is an experience!", order:{pizzaName:'The New Experience',toppings:['pesto','cheese','shrimp']}, money:19.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+  { name:'Lorenzo', isKid:false, dialogue:"SHRIMP DAY! I have been waiting for this! Shrimp and anchovy! The sea! The WHOLE SEA on one pizza!", order:{pizzaName:'The Deep Blue Lorenzo',toppings:['sauce','cheese','shrimp','anchovy']}, money:21.00, get svg(){return svgMan('#C87820','#E04020');} },
+  { name:'Veggie Man', isKid:false, dialogue:"Seafood showcase. Great. I'll be over here with my mushrooms and peppers, thank you very much. I have nothing against the ocean. I just don't put it on my pizza.", order:{pizzaName:'The Land Stands Firm',toppings:['sauce','cheese','mushroom','pepper','eggplant']}, money:14.00, get svg(){return svgMan('#3A5A20','#4A8030','#D0B880');} },
+
+  // Day 35 – Fresh From the Farm
+  { name:'Buddy', isKid:false, dialogue:"Okay I know I work here but I HAVE to try the chicken pizza. Just make me one. I'll pay. This is a matter of personal urgency.", order:{pizzaName:"Buddy's Research Bite",toppings:['sauce','cheese','chicken','basil']}, money:15.00, get svg(){return svgMan('#D4A060','#5080D0');} },
+  { name:'Plant Lady', isKid:false, dialogue:"CORN! On a pizza! I had a dream about this once and now it's real life. Corn and chicken together — a farm-to-table fantasy!", order:{pizzaName:'The Farm Dream',toppings:['pesto','cheese','corn','chicken']}, money:18.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"The ingredient reveal is always the best story of PizzaCon. Corn pizza content is going to absolutely pop off. Give me something colorful.", order:{pizzaName:'The Reveal Story',toppings:['sauce','cheese','corn','pepper']}, money:17.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
+  { name:'Veggie Man', isKid:false, dialogue:"Now THIS I can get behind. Corn is a vegetable. Corn, mushroom, and onion? We're finally speaking my language.", order:{pizzaName:"Veggie Man's Moment",toppings:['sauce','cheese','corn','mushroom','onion']}, money:16.00, get svg(){return svgMan('#3A5A20','#4A8030','#D0B880');} },
+
+  // Day 36 – Farm-to-Table Day
+  { name:'Dr. Michael Keh', isKid:false, dialogue:"Corn and chicken. Let me see what you do with them. Simple sauce base. Don't overthink the cheese.", order:{pizzaName:'The Keh Evaluation',toppings:['sauce','cheese','corn','chicken']}, money:20.00, get svg(){return svgMan('#1A1818','#2A3A6A','#E0B890',glasses);} },
+  { name:'Plant Lady', isKid:false, dialogue:"I want the most farm-y pizza you can make. Corn, mushrooms, peppers — if it grew in the ground I want it on here. This is my Super Bowl.", order:{pizzaName:'The Garden Victory',toppings:['pesto','cheese','corn','mushroom','pepper']}, money:18.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+  { name:'Lorenzo', isKid:false, dialogue:"Farm-to-Table Day pizza! Corn AND chicken AND bacon — because the farm has pigs too! The FULL FARM experience!", order:{pizzaName:'Full Farm Lorenzo',toppings:['sauce','cheese','corn','chicken','bacon']}, money:21.00, get svg(){return svgMan('#C87820','#E04020');} },
+  { name:'OrderUp Rep', isKid:false, dialogue:"The model says corn, chicken, and onion. It's technically the highest-rated Farm-to-Table cluster in our training data. Chad Braxley always trusts the model.", order:{pizzaName:'The 94th Percentile',toppings:['sauce','cheese','corn','chicken','onion']}, money:17.00, get svg(){return svgMan('#1A1A2A','#1060C0','#D0B090');} },
+
+  // Day 37 – Qualifier Nerves
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"Pre-competition dinner! I always eat something reliable before a big coverage day. Pepperoni and mushrooms — can't go wrong.", order:{pizzaName:'The Pre-Show Reliable',toppings:['sauce','cheese','pepperoni','mushroom']}, money:16.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
+  { name:'Veggie Man', isKid:false, dialogue:"I don't understand why people are so worked up about this competition. It's pizza. It should bring people together. Anyway, eggplant and basil please.", order:{pizzaName:'The Anti-Anxiety Slice',toppings:['pesto','cheese','eggplant','basil']}, money:15.00, get svg(){return svgMan('#3A5A20','#4A8030','#D0B880');} },
+  { name:'Plant Lady', isKid:false, dialogue:"Dr. Keh walked past me today and someone in my book club group chat FAINTED. Just fainted. He's a celebrity in certain circles.", order:{pizzaName:'The Faint-Worthy Fan Pizza',toppings:['sauce','cheese','chicken','corn','basil']}, money:19.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+  { name:'Lorenzo', isKid:false, dialogue:"Tomorrow is THE DAY. I have not slept in thirty-seven hours. Make me something with a lot of protein so I survive until the ceremony.", order:{pizzaName:"The Insomniac's Fuel",toppings:['sauce','cheese','chicken','sausage','bacon']}, money:20.00, get svg(){return svgMan('#C87820','#E04020');} },
+
+  // Day 38 – PizzaPalooza Competition Day
+  { name:'Dr. Michael Keh', isKid:false, dialogue:"My signature: wheatdough, sauce, cheese, shrimp, and basil. This is what I compete with. Show me that you understand it.", order:{pizzaName:'The Keh Signature',toppings:['sauce','cheese','shrimp','basil']}, money:25.00, get svg(){return svgMan('#1A1818','#2A3A6A','#E0B890',glasses);} },
+  { name:'Lorenzo', isKid:false, dialogue:"I AM TOO EXCITED TO KNOW WHAT I WANT. Just make me the most celebratory pizza you can imagine. I am BUZZING. PIZZA IS EVERYTHING!", order:{pizzaName:'The Championship Chaos',toppings:['sauce','cheese','pepperoni','sausage','bacon','corn']}, money:22.00, get svg(){return svgMan('#C87820','#E04020');} },
+  { name:'Plant Lady', isKid:false, dialogue:"I watched Dr. Keh win and then cried a little. Something that feels like a victory lap — chicken and basil, please.", order:{pizzaName:'The Victory Lap',toppings:['pesto','cheese','chicken','basil']}, money:18.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"We just hit 500k live viewers! I need to eat something because I have been broadcasting for six hours straight. Anything. Fast. Delicious.", order:{pizzaName:"The Broadcaster's Bite",toppings:['sauce','cheese','ham','mushroom']}, money:17.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
+
+  // Day 39 – The Morning After
+  { name:'OrderUp Rep', isKid:false, dialogue:"I need comfort food. Our social media engagement dropped 12% after the results. The model didn't predict that. Just make it good.", order:{pizzaName:'The Algorithm Mourns',toppings:['sauce','cheese','sausage','bacon']}, money:16.00, get svg(){return svgMan('#1A1A2A','#1060C0','#D0B090');} },
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"Post-competition day pizza — something light and fresh. I feel like I've consumed my body weight in pizza this week and I regret nothing.", order:{pizzaName:'The Light Recovery',toppings:['pesto','cheese','basil','olive']}, money:17.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
+  { name:'Dr. Michael Keh', isKid:false, dialogue:"One more pizza before Awards Night. Something with corn. I didn't use it in my competition piece but I've been thinking about it since Farm-to-Table Day.", order:{pizzaName:"The Champion's Curiosity",toppings:['sauce','cheese','corn','basil']}, money:20.00, get svg(){return svgMan('#1A1818','#2A3A6A','#E0B890',glasses);} },
+  { name:'Veggie Man', isKid:false, dialogue:"I watched the competition. The man knows his vegetables. That basil placement was intentional and I respected it.", order:{pizzaName:'The Reluctant Tribute',toppings:['pesto','cheese','eggplant','mushroom','pepper']}, money:15.00, get svg(){return svgMan('#3A5A20','#4A8030','#D0B880');} },
+
+  // Day 40 – Platinum Eve
+  { name:'Plant Lady', isKid:false, dialogue:"Pre-ceremony dinner! I want something celebratory but also something that won't spill on my pizza dress. Recommendations?", order:{pizzaName:'The Dress-Safe Celebrator',toppings:['pesto','cheese','chicken','basil']}, money:18.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+  { name:'Lorenzo', isKid:false, dialogue:"I need my pre-ceremony ritual pizza. I have had this exact pizza before every Awards Night for eleven years. Pepperoni, sausage, onion. EXACTLY that. Don't change anything.", order:{pizzaName:'The Lorenzo Ritual',toppings:['sauce','cheese','pepperoni','sausage','onion']}, money:19.00, get svg(){return svgMan('#C87820','#E04020');} },
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"Last pizza before the ceremony! Something special — shrimp and corn. Convention finale energy.", order:{pizzaName:'The Finale Pizza',toppings:['sauce','cheese','shrimp','corn']}, money:21.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
+  { name:'Veggie Man', isKid:false, dialogue:"I have to admit PizzaCon was better than I expected. Still too much meat everywhere. But the corn thing was good. I'll remember the corn thing.", order:{pizzaName:'The Reluctant Fond Memory',toppings:['pesto','cheese','corn','olive','basil']}, money:16.00, get svg(){return svgMan('#3A5A20','#4A8030','#D0B880');} },
+
+  // Day 41 – Awards Night (finale)
+  { name:'Dr. Michael Keh', isKid:false, dialogue:"One final pizza. My treat — though I understand you're the one making it. Something new. Something from this week. Shrimp and corn.", order:{pizzaName:'The Keh Farewell',toppings:['pesto','cheese','shrimp','corn']}, money:30.00, get svg(){return svgMan('#1A1818','#2A3A6A','#E0B890',glasses);} },
+  { name:'Plant Lady', isKid:false, dialogue:"A memory pizza. Put everything I had this week on it — corn, chicken, basil. Make it the whole trip in one slice.", order:{pizzaName:'The Memory Pizza',toppings:['sauce','cheese','corn','chicken','basil']}, money:22.00, get svg(){return svgWoman('#60A840','#4A8040','#F0C8A0','long');} },
+  { name:'Lorenzo', isKid:false, dialogue:"Last pizza of PizzaCon! I always finish the event the same way I started — with something CLASSIC! Then I go home and sleep for four days!", order:{pizzaName:'The Full Circle Lorenzo',toppings:['sauce','cheese','pepperoni']}, money:20.00, get svg(){return svgMan('#C87820','#E04020');} },
+  { name:'Priya (ZaZoom)', isKid:false, dialogue:"Wrapping up our Awards Night coverage. Last pizza — make it a good one. Something I'll remember.", order:{pizzaName:'The ZaZoom Signing Off',toppings:['pesto','cheese','shrimp','basil','olive']}, money:23.00, get svg(){return svgWoman('#1A1A1A','#D04080','#C08860','long');} },
 ];
 
-const state = { added:new Set(), order:null, pizzaName:'', customerIdx:0, score:0, money:0, served:false, totalRounds:CUSTOMERS.length };
+const BASIC_ING = new Set(INGREDIENTS.filter(i=>i.ch===1 && i.cashCost===0).map(i=>i.id));
+
+const UPGRADES = [
+  { id:'undo',         name:'Undo Button',      icon:'↩️',  desc:'Remove the last-added topping.',            cost:5  },
+  { id:'ovenbooster',  name:'Oven Booster',      icon:'🔥',  desc:'+20% money on perfect orders.',             cost:10 },
+  { id:'tipjar',       name:'Tip Jar',            icon:'🪙',  desc:'Earn +$1 bonus on every order served.',     cost:3  },
+  { id:'widecounter',  name:'Wide Counter',       icon:'📐',  desc:'Kitchen shows 5 ingredients per row.',      cost:15 },
+  { id:'zazoom',       name:'ZaZoom Poster',      icon:'📺',  desc:'Decorate your wall. Purely cosmetic!',      cost:6  },
+  { id:'pizzawarmer', name:'Pizza Warmer',        icon:'🌡️',  desc:'+15% earnings on every order served.',      cost:20, ch:3 },
+];
+
+const ING_MAP=Object.fromEntries(INGREDIENTS.map(i=>[i.id,i]));
+const state = { added:new Set(), order:null, pizzaName:'', customerIdx:0, score:0, money:0, served:false, totalRounds:CUSTOMERS.length, unlocked:new Set(BASIC_ING), chapter:1, upgrades:new Set(), ingredientSales:{} };
 
 function seededRand(seed) { let s=seed; return ()=>{s=(s*16807)%2147483647;return(s-1)/2147483646;}; }
 
@@ -538,8 +982,13 @@ function drawPizza() {
 
 function showCounterScene() {
   const c=CUSTOMERS[state.customerIdx];
-  document.getElementById('customer-text').textContent=c.dialogue;
-  document.getElementById('hint-text').textContent=INGREDIENTS.filter(i=>c.order.toppings.includes(i.id)).map(i=>i.name).join(', ');
+  const availableToppings=INGREDIENTS.filter(i=>c.order.toppings.includes(i.id)&&state.unlocked.has(i.id)&&!i.isBase);
+  const availableNames=availableToppings.map(i=>i.name);
+  const dialogue=availableNames.length>0
+    ? `I'd like a ${c.order.pizzaName}! ${availableNames.length===1?availableNames[0]:availableNames.slice(0,-1).join(', ')+' and '+availableNames[availableNames.length-1]}. Please!`
+    : `Just a plain pizza base for me today, please!`;
+  document.getElementById('customer-text').textContent=dialogue;
+  document.getElementById('hint-text').textContent=availableNames.join(', ');
   document.getElementById('hint-bubble').classList.add('hidden');
   const custEl=document.getElementById('cs-customer');
   custEl.innerHTML=c.svg; custEl.className='cs-customer'+(c.isKid?' kid':'');
@@ -553,9 +1002,92 @@ function showCounterScene() {
 
 function showHint() { document.getElementById('hint-bubble').classList.remove('hidden'); }
 
+function showShop() {
+  document.getElementById('shop-balance').textContent=state.money.toFixed(2);
+  renderShop();
+  document.getElementById('shop-overlay').classList.remove('hidden');
+}
+function closeShop() {
+  document.getElementById('shop-overlay').classList.add('hidden');
+  if(!document.getElementById('kitchen-scene').classList.contains('hidden')) {
+    renderIngredients(); renderTicket();
+  }
+}
+function renderShop() {
+  const grid=document.getElementById('shop-grid');
+  grid.innerHTML='';
+  function header(txt, cls){ const h=document.createElement('div'); h.className='shop-section-header '+cls; h.textContent=txt; grid.appendChild(h); }
+  function card(ing){
+    const owned=state.unlocked.has(ing.id);
+    const div=document.createElement('div');
+    if(ing.ch==='pass'){
+      div.className='shop-item pass-locked';
+      div.innerHTML=`<div class="shop-tex ${ing.tex}" style="opacity:0.55;filter:grayscale(0.3)"></div><div class="shop-name">${ing.name}</div><div class="shop-type-tag">${ing.pass}</div><button class="btn-buy cant" disabled>🎫 Pass</button>`;
+    } else if(ing.ch==='temp'){
+      div.className='shop-item temp-locked';
+      div.innerHTML=`<div class="shop-tex ${ing.tex}" style="opacity:0.55;filter:grayscale(0.3)"></div><div class="shop-name">${ing.name}</div><div class="shop-type-tag">${ing.event}</div><button class="btn-buy cant" disabled>⏳ Event</button>`;
+    } else {
+      const locked=ing.ch>state.chapter;
+      const dollarCost=ing.cashCost/10;
+      const can=!owned&&!locked&&state.money>=dollarCost;
+      if(locked){
+        div.className='shop-item';
+        div.innerHTML=`<div class="shop-tex ${ing.tex}" style="opacity:0.35;filter:grayscale(0.8)"></div><div class="shop-name">${ing.name}</div><div class="shop-type-tag">${ing.type}</div><button class="btn-buy cant" disabled>Ch.${ing.ch} 🔒</button>`;
+      } else {
+        div.className='shop-item'+(owned?' owned':'');
+        const cls=owned?'got':can?'can':'cant';
+        const label=owned?'✓ Owned':`🪙 ${ing.cashCost}`;
+        div.innerHTML=`<div class="shop-tex ${ing.tex}"></div><div class="shop-name">${ing.name}</div><div class="shop-type-tag">${ing.type}</div><button class="btn-buy ${cls}" ${owned||!can?'disabled':''} onclick="buyIngredient('${ing.id}')">${label}</button>`;
+      }
+    }
+    grid.appendChild(div);
+  }
+  const chItems=INGREDIENTS.filter(i=>typeof i.ch==='number'&&!i.isBase&&i.cashCost>0);
+  if(chItems.length){ header('📦 Ingredients','ch'); chItems.forEach(card); }
+  const passItems=INGREDIENTS.filter(i=>i.ch==='pass');
+  if(passItems.length){ header('🎫 Pizza Pass','pass'); passItems.forEach(card); }
+  const tempItems=INGREDIENTS.filter(i=>i.ch==='temp');
+  if(tempItems.length){ header('⏳ Limited Time','temp'); tempItems.forEach(card); }
+
+  header('🔧 Upgrades','upg');
+  for(const upg of UPGRADES){
+    const owned=state.upgrades.has(upg.id);
+    const locked=upg.ch&&upg.ch>state.chapter;
+    const can=!owned&&!locked&&state.money>=upg.cost;
+    const div=document.createElement('div');
+    div.className='upgrade-card'+(owned?' owned':'');
+    const btnLabel=owned?'✓ Owned':locked?`Ch.${upg.ch} 🔒`:'$'+upg.cost;
+    const btnCls=owned?'got':locked?'cant':can?'can':'cant';
+    div.innerHTML=`<div class="upg-icon">${upg.icon}</div><div class="upg-info"><div class="upg-name">${upg.name}</div><div class="upg-desc">${upg.desc}</div></div><button class="btn-buy-upg ${btnCls}" ${owned||!can?'disabled':''} onclick="buyUpgrade('${upg.id}')">${btnLabel}</button>`;
+    grid.appendChild(div);
+  }
+}
+function buyUpgrade(id) {
+  const upg=UPGRADES.find(u=>u.id===id);
+  if(!upg||state.upgrades.has(id)||state.money<upg.cost) return;
+  state.money-=upg.cost;
+  state.upgrades.add(id);
+  document.getElementById('hud-money').textContent=state.money.toFixed(2);
+  document.getElementById('shop-balance').textContent=state.money.toFixed(2);
+  if(id==='zazoom') document.getElementById('zazoom-poster').classList.add('visible');
+  renderShop();
+}
+
+function buyIngredient(id) {
+  const ing=INGREDIENTS.find(i=>i.id===id);
+  if(!ing||!ing.cashCost||state.unlocked.has(id)||ing.ch>state.chapter) return;
+  const dollarCost=ing.cashCost/10;
+  if(state.money<dollarCost) return;
+  state.money-=dollarCost;
+  state.unlocked.add(id);
+  document.getElementById('hud-money').textContent=state.money.toFixed(2);
+  document.getElementById('shop-balance').textContent=state.money.toFixed(2);
+  renderShop();
+}
+
 function goToKitchen() {
   const c=CUSTOMERS[state.customerIdx];
-  state.order=c.order.toppings; state.pizzaName=c.order.pizzaName;
+  state.order=c.order.toppings.filter(id=>state.unlocked.has(id)&&!(ING_MAP[id]&&ING_MAP[id].isBase)); state.pizzaName=c.order.pizzaName;
   state.added.clear(); state.served=false;
   document.getElementById('counter-scene').classList.add('hidden');
   document.getElementById('kitchen-scene').classList.remove('hidden');
@@ -565,13 +1097,21 @@ function goToKitchen() {
 function renderIngredients() {
   const panel=document.getElementById('ingredients-panel');
   panel.innerHTML='';
-  for(const ing of INGREDIENTS){
+  if(state.upgrades.has('widecounter')) panel.classList.add('wide'); else panel.classList.remove('wide');
+  for(const ing of INGREDIENTS.filter(i=>state.unlocked.has(i.id)&&!i.isBase)){
     const card=document.createElement('div');
     card.className='ing-card'+(state.added.has(ing.id)?' selected':'');
     card.innerHTML=`<div class="ing-texture ${ing.tex}"><div class="ing-check">✓</div></div><div class="ing-label">${ing.name}</div>`;
     card.addEventListener('click',()=>toggleIngredient(ing.id));
     panel.appendChild(card);
   }
+}
+
+function undoLastTopping() {
+  if(!state.upgrades.has('undo')||state.added.size===0) return;
+  const last=[...state.added].pop();
+  state.added.delete(last);
+  renderIngredients(); renderTicket(); drawPizza();
 }
 
 function renderTicket() {
@@ -581,8 +1121,9 @@ function renderTicket() {
   for(const id of state.order){
     const ing=INGREDIENTS.find(i=>i.id===id);
     const item=document.createElement('div');
-    item.className='ticket-item'+(state.added.has(id)?' done':'');
-    item.innerHTML=`<div class="ti-dot" style="background:${ing.dot}"></div>${ing.name}`;
+    const locked=!state.unlocked.has(id);
+    item.className='ticket-item'+(state.added.has(id)?' done':'')+(locked?' locked':'');
+    item.innerHTML=`<div class="ti-dot" style="background:${ing.dot}"></div>${ing.name}${locked?' 🔒':''}`;
     container.appendChild(item);
   }
 }
@@ -610,7 +1151,11 @@ function servePizza() {
   state.score+=pts;
   const pct=pts/maxPts;
   const customer=CUSTOMERS[state.customerIdx];
-  const earned=pct>=1?customer.money:pct>=0.6?customer.money*0.7:customer.money*0.3;
+  let earned=pct>=1?customer.money:pct>=0.6?customer.money*0.7:customer.money*0.3;
+  if(state.upgrades.has('tipjar')) earned+=1;
+  if(pct>=1 && state.upgrades.has('ovenbooster')) earned*=1.2;
+  if(state.upgrades.has('pizzawarmer')) earned*=1.15;
+  for(const id of state.added){ state.ingredientSales[id]=(state.ingredientSales[id]||0)+1; }
   state.money+=earned;
   const mood=Math.max(0,parseInt(document.getElementById('hud-mood').textContent)-(missing+extra)*7);
   document.getElementById('hud-mood').textContent=mood+'%';
@@ -631,6 +1176,7 @@ function servePizza() {
     <div class="fb-sub">${sub}</div>
     <div class="fb-pts">+$${earned.toFixed(2)}</div>
     ${details.length?`<div class="fb-detail">${details.join(' · ')}</div>`:''}
+    ${!isLast?`<button class="btn-shop-fb" onclick="showShop()">🛒 Visit Shop</button>`:''}
     <button class="btn-next" onclick="${isLast?'showGameOver()':'nextCustomer()'}">
       ${isLast?'Close Up Shop':'Next Customer →'}
     </button>`;
@@ -661,6 +1207,8 @@ function showGameOver() {
 function restartGame() {
   state.added.clear(); state.score=0; state.money=0;
   state.customerIdx=0; state.served=false; state.pizzaName='';
+  state.unlocked=new Set(BASIC_ING); state.chapter=1; state.upgrades=new Set(); state.ingredientSales={};
+  document.getElementById('zazoom-poster').classList.remove('visible');
   document.getElementById('hud-day').textContent='1';
   document.getElementById('hud-mood').textContent='100%';
   document.getElementById('hud-coins').textContent='0';
@@ -668,10 +1216,97 @@ function restartGame() {
   showCounterScene();
 }
 
+// ── Pizzaria Protector ──────────────────────────────────────────────────────
+let protectorTimer=null, protectorHP=100, protectorEnemyInterval=null;
+
+function openProtector() {
+  protectorHP=100;
+  const overlay=document.getElementById('protector-overlay');
+  overlay.classList.remove('hidden');
+  document.getElementById('p-result').classList.add('hidden');
+  document.getElementById('p-hp-fill').style.width='100%';
+  document.getElementById('p-hp-fill').style.background='#4CAF50';
+  document.getElementById('p-arena').querySelectorAll('.p-enemy').forEach(e=>e.remove());
+  startProtector();
+}
+
+function startProtector() {
+  let timeLeft=30;
+  document.getElementById('p-timer').textContent=timeLeft;
+  protectorEnemyInterval=setInterval(spawnEnemy,1800);
+  protectorTimer=setInterval(()=>{
+    timeLeft--;
+    document.getElementById('p-timer').textContent=timeLeft;
+    if(timeLeft<=0 || protectorHP<=0){ endProtector(protectorHP>0); }
+  },1000);
+}
+
+function spawnEnemy() {
+  const arena=document.getElementById('p-arena');
+  const enemy=document.createElement('div');
+  const types=[{e:'🍕',hp:1},{e:'😤',hp:2},{e:'🍕😤',hp:3}];
+  const t=types[Math.floor(Math.random()*types.length)];
+  enemy.className='p-enemy';
+  enemy.textContent=t.e;
+  enemy.dataset.hp=t.hp;
+  enemy.style.top=Math.floor(20+Math.random()*55)+'%';
+  enemy.style.animationDuration=(4+Math.random()*3).toFixed(1)+'s';
+  enemy.addEventListener('animationend',()=>{
+    if(!enemy.dataset.defeated){
+      protectorHP=Math.max(0,protectorHP-20);
+      updateHP();
+      enemy.remove();
+      if(protectorHP<=0) endProtector(false);
+    }
+  });
+  enemy.addEventListener('click',()=>{
+    let h=parseInt(enemy.dataset.hp)-1;
+    enemy.dataset.hp=h;
+    showHit(enemy,'+1');
+    if(h<=0){
+      enemy.dataset.defeated='1';
+      enemy.classList.add('p-defeated');
+      setTimeout(()=>enemy.remove(),300);
+    }
+  });
+  arena.appendChild(enemy);
+}
+
+function showHit(el, txt) {
+  const span=document.createElement('span');
+  span.className='p-hit-text'; span.textContent=txt;
+  el.appendChild(span);
+  setTimeout(()=>span.remove(),700);
+}
+
+function updateHP() {
+  const fill=document.getElementById('p-hp-fill');
+  fill.style.width=protectorHP+'%';
+  fill.style.background=protectorHP>50?'#4CAF50':protectorHP>25?'#FF9800':'#f44336';
+}
+
+function endProtector(won) {
+  clearInterval(protectorTimer); clearInterval(protectorEnemyInterval);
+  document.getElementById('p-arena').querySelectorAll('.p-enemy').forEach(e=>e.remove());
+  const result=document.getElementById('p-result');
+  const reward=won?8:0;
+  if(reward>0){ state.money+=reward; document.getElementById('hud-money').textContent=state.money.toFixed(2); }
+  document.getElementById('p-res-icon').textContent=won?'🏆':'💥';
+  document.getElementById('p-res-title').textContent=won?'Restaurant Defended!':'The Deep Dish Won...';
+  document.getElementById('p-res-sub').textContent=won?'You repelled the Deep Dish Gang!':'They trashed the place. Better luck next time.';
+  document.getElementById('p-res-money').textContent=won?'+$8.00 reward!':'No reward this time.';
+  result.classList.remove('hidden');
+}
+
+function closeProtector() {
+  document.getElementById('protector-overlay').classList.add('hidden');
+}
+
 showCounterScene();
 document.addEventListener('keydown', e => {
   if(document.getElementById('counter-scene').classList.contains('hidden')) return;
   if(e.key==='a'||e.key==='A'||e.key==='Enter') goToKitchen();
   if(e.key==='b'||e.key==='B') showHint();
+  if(e.key==='s'||e.key==='S') showShop();
 });
 </script>
